@@ -1,0 +1,35 @@
+version: '3'
+services:
+  database:
+    image: mysql:5.7
+    volumes:
+        - database:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: wordpress
+    networks:
+      - back
+
+  wordpress:
+    depends_on:
+      - database
+    image: wordpress:latest
+    restart: always
+    volumes:
+      - wordpress:/var/www/html/wp-content:rw
+      - ./app:/var/www/html/wp-content/themes/instapress:ro
+    environment:
+      WORDPRESS_DB_HOST: database:3306
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DEBUG: 1
+    ports:
+      - 80:80
+    networks:
+      - back
+
+volumes:
+  database: {}
+  wordpress: {}
+
+networks:
+  back:

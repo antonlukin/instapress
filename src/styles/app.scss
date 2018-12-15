@@ -1,0 +1,21 @@
+// Define font vars
+$font-regular: sans-serif;
+
+// Define color vars
+$color-dark: #000000;
+$color-light: #ffffff;
+
+// Setup default styles
+@import "config/*.scss";
+
+body {
+  display: block;
+
+  line-height: 1.4;
+  font-size: 16px;
+  font-weight: normal;
+  font-family: $font-regular;
+}
+
+// Import layout styles
+@import "layout/*.scss";
