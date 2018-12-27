@@ -53,7 +53,7 @@ function instapress_styles() {
         $version = wp_get_theme()->get( 'Version' );
     }
 
-    wp_enqueue_script('instapress-style', get_template_directory_uri() . '/assets/scripts.min.js', [], $version, true);
+    wp_enqueue_style('instapress-style', get_template_directory_uri() . '/assets/styles.min.css', [], $version);
 }
 add_action( 'wp_enqueue_scripts', 'instapress_styles' );
 
@@ -79,6 +79,13 @@ function instapress_setup() {
     // Set post thumbnail default size
     set_post_thumbnail_size( 1280, 9999 );
 
+    // This theme uses wp_nav_menu() in header and footer.
+    register_nav_menus(
+        array(
+            'primary' => __( 'Primary menu', 'instapress' ),
+        )
+    );
+
     // Switch default core markup to output valid HTML5
     add_theme_support(
         'html5',
@@ -95,3 +102,52 @@ function instapress_setup() {
 	add_theme_support( 'customize-selective-refresh-widgets' );
 }
 add_action( 'after_setup_theme', 'instapress_setup' );
+
+
+/**
+ * Replace useless menu classes with custom ones
+ *
+ * Applies to menu in primary theme location only
+ */
+function instapress_menu_classes( $classes, $item, $args ) {
+    // Redefine classes array
+    $classes = array();
+
+    if( $args->theme_location === 'primary' ) {
+        $classes[] = 'menu__item';
+    }
+
+    if( $item->current === true ) {
+        $classes[] = 'menu__item--current';
+    }
+
+    return $classes;
+}
+add_filter( 'nav_menu_css_class', 'instapress_menu_classes', 10, 3 );
+
+
+/**
+ * Remove stupid menu id attribute
+ *
+ * Just remove this filter if you want to use menu item id
+ * Applies to menu in primary theme location only
+ */
+function instapress_menu_item_id() {
+    return '';
+}
+add_filter( 'nav_menu_item_id', 'instapress_menu_item_id' );
+
+
+/**
+ * Add class to link menu items
+ *
+ * Applies to menu in primary theme location only
+ */
+function instapress_menu_link_class( $atts, $item, $args ) {
+    if( $args->theme_location === 'primary' ) {
+        $atts['class'] = 'menu__item-link';
+    }
+
+    return $atts;
+}
+add_filter( 'nav_menu_link_attributes', 'instapress_menu_link_class', 10, 3 );

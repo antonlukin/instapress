@@ -1,0 +1,30 @@
+.post {
+  position: relative;
+
+  width: $width-content;
+  max-width: 100%;
+  margin: 0 0 2rem;
+  overflow: hidden;
+
+  border: 1px solid darken($color-dark, 3%);
+  border-radius: 3px;
+
+  .post__thumbnail {
+    display: block;
+
+    width: 100%;
+    height: auto;
+  }
+
+  .post__content {
+    display: block;
+
+    padding: 1rem 2rem;
+
+    font-family: $font-monospace;
+    font-size: 0.75rem;
+    color: $color-text;
+
+    background-color: lighten($color-dark, 3%);
+  }
+}

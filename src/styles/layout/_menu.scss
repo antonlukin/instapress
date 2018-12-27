@@ -1,0 +1,54 @@
+.menu {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  user-select: none;
+
+  width: $width-content;
+  max-width: 100%;
+  margin: 1rem auto 0.5rem;
+
+  font-size: 0.8125rem;
+
+  border-bottom: solid 1px lighten($color-dark, 10%);
+
+  .menu__item {
+    display: block;
+    position: relative;
+
+    margin-bottom: -1px;
+    overflow: hidden;
+
+    border-bottom: 1px solid transparent;
+
+    &.menu__item--current {
+      border-bottom-color: $color-light;
+
+      .menu__item-link {
+        color: $color-light;
+      }
+
+      .menu__item-link:hover {
+        color: $color-light;
+      }
+    }
+  }
+
+  .menu__item-link {
+    display: block;
+
+    padding: .375rem 0.625rem;
+    overflow: hidden;
+
+    color: $color-text;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    transition: color .25s;
+
+    &:hover {
+      color: lighten($color-text, 10%);
+    }
+  }
+}

@@ -1,0 +1,28 @@
+.summary {
+  display: block;
+
+  &:before {
+    content: "{";
+    display: block;
+  }
+
+  &:after {
+    content: "}";
+    display: block;
+  }
+
+  .summary__field {
+    display: block;
+
+    margin-left: 2rem;
+    line-height: 1.65;
+
+    span {
+      color: $color-summary-key;
+    }
+
+    strong {
+      color: $color-summary-value;
+    }
+  }
+}

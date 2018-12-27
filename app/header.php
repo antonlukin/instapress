@@ -11,6 +11,7 @@
 	<meta charset="<?php bloginfo( 'charset' ); ?>" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#21252b">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/hack-font/3.003/web/hack.css" rel="stylesheet">
 
 	<?php wp_head(); ?>
 </head>
@@ -23,8 +24,9 @@
             wp_nav_menu( array(
                 'theme_location' => 'primary',
                 'echo' => true,
-                'items_wrap' => '<ul class="navbar">%3$s</ul>',
-                'container_class' => 'navbar__menu'
+                'depth' => 1,
+                'items_wrap' => '<ul class="menu">%3$s</ul>',
+                'container' => 'false'
             ) );
         endif;
     ?>
