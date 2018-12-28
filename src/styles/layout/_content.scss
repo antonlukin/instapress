@@ -1,13 +1,13 @@
-.header {
+.content {
   display: block;
   position: relative;
 
   width: $width-content;
   max-width: 100%;
   margin: 0 auto;
-  padding: 1rem 1.25rem;
+  padding: 0 1.25rem;
 
   @media screen and (max-width: 767px) {
-    padding: 0.5rem 0.75rem;
+    padding: 0 0.75rem;
   }
 }

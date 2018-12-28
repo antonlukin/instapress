@@ -6,12 +6,13 @@ $font-monospace: 'Hack', monospace;
 $color-text: #738699;
 $color-dark: #1a1f28;
 $color-light: #e9e9e9;
+$color-select: #343d4e;
 
 $color-summary-key: #e29949;
 $color-summary-value: #56b6c2;
 
 // Define content width
-$width-content: 37.5rem;
+$width-content: 40rem;
 
 // Setup default styles
 @import "config/*.scss";
@@ -26,7 +27,16 @@ body {
 
   color: $color-light;
   background-color: $color-dark;
+
+  will-change: transform;
+}
+
+::selection {
+  background-color: rgba($color-select, 0.75);
 }
 
 // Import layout styles
 @import "layout/*.scss";
+
+// Import entry styles
+@import "entry/*.scss";

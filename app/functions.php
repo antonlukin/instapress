@@ -76,6 +76,14 @@ function instapress_setup() {
     // Enable support for Post Thumbnails on posts and pages.
     add_theme_support( 'post-thumbnails' );
 
+    // Enable post formats
+    add_theme_support( 'post-formats',
+        array(
+            'image',
+            'video'
+        )
+    );
+
     // Set post thumbnail default size
     set_post_thumbnail_size( 1280, 9999 );
 
@@ -87,8 +95,7 @@ function instapress_setup() {
     );
 
     // Switch default core markup to output valid HTML5
-    add_theme_support(
-        'html5',
+    add_theme_support( 'html5',
         array(
             'search-form',
             'comment-form',
@@ -97,9 +104,6 @@ function instapress_setup() {
             'caption',
         )
     );
-
-    // Add theme support for selective refresh for widgets
-	add_theme_support( 'customize-selective-refresh-widgets' );
 }
 add_action( 'after_setup_theme', 'instapress_setup' );
 
@@ -144,10 +148,72 @@ add_filter( 'nav_menu_item_id', 'instapress_menu_item_id' );
  * Applies to menu in primary theme location only
  */
 function instapress_menu_link_class( $atts, $item, $args ) {
-    if( $args->theme_location === 'primary' ) {
+    if ( $args->theme_location === 'primary' ) {
         $atts['class'] = 'menu__item-link';
     }
 
     return $atts;
 }
 add_filter( 'nav_menu_link_attributes', 'instapress_menu_link_class', 10, 3 );
+
+
+/**
+ * Replace annoying post classes
+ */
+function instapress_post_class( $classes, $class, $post_id ) {
+    $classes = array();
+
+    if ( $class ) {
+		if ( ! is_array( $class ) ) {
+			$class = preg_split( '#\s+#', $class );
+        }
+
+		$classes = array_map( 'esc_attr', $class );
+    }
+
+    if ( is_singular( 'page' ) ) {
+        $classes[] = 'post--page';
+    }
+
+    if ( is_singular( 'post' ) && has_post_format() ) {
+        $classes[] = 'post--' . get_post_format();
+    }
+
+    return $classes;
+}
+add_filter( 'post_class', 'instapress_post_class', 10, 3 );
+
+
+/**
+ * Update annoying body classes
+ */
+function instapress_body_class( $wp_classes, $extra_classes ) {
+    $classes = array();
+
+    if ( is_archive() ) {
+        $classes[] = 'is-archive';
+    }
+
+    if ( is_admin_bar_showing() ) {
+        $classes[] = 'is-adminbar';
+    }
+
+    if ( is_front_page() ) {
+        $classes[] = 'is-front';
+    }
+
+    if ( is_singular( 'page' ) && ! is_front_page() ) {
+        $classes[] = 'is-page';
+    }
+
+    if ( is_singular( 'post' ) ) {
+        if ( has_post_format() ) {
+            $classes[] = 'is-' . get_post_format();
+        } else {
+            $classes[] = 'is-post';
+        }
+    }
+
+    return $classes;
+}
+add_filter( 'body_class', 'instapress_body_class', 10, 2 );

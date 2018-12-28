@@ -1,5 +1,13 @@
-.summary {
+.entry-summary {
   display: block;
+
+  padding: 1rem 2rem;
+
+  font-family: $font-monospace;
+  font-size: 0.75rem;
+  color: $color-text;
+
+  background-color: lighten($color-dark, 3%);
 
   &:before {
     content: "{";
@@ -11,7 +19,7 @@
     display: block;
   }
 
-  .summary__field {
+  .entry-summary__field {
     display: block;
 
     margin-left: 2rem;

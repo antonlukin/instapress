@@ -1,4 +1,5 @@
 .post {
+  display: block;
   position: relative;
 
   width: $width-content;
@@ -6,25 +7,28 @@
   margin: 0 0 2rem;
   overflow: hidden;
 
-  border: 1px solid darken($color-dark, 3%);
-  border-radius: 3px;
+  text-decoration: none;
 
-  .post__thumbnail {
-    display: block;
+  @at-root a#{&} {
+    cursor: pointer;
 
-    width: 100%;
-    height: auto;
+    .entry-thumbnail__image {
+      transition: filter .5s;
+    }
+
+    &:hover {
+      .entry-thumbnail__image {
+        filter: brightness(85%);
+      }
+    }
   }
 
-  .post__content {
-    display: block;
+  &.post--page {
 
-    padding: 1rem 2rem;
+  }
 
-    font-family: $font-monospace;
-    font-size: 0.75rem;
-    color: $color-text;
-
-    background-color: lighten($color-dark, 3%);
+  &.post--image {
+    box-shadow: 0 0 0 1px darken($color-dark, 3%);
+    border-radius: 3px;
   }
 }

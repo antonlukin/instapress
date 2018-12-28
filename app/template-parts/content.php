@@ -7,32 +7,35 @@
  */
 ?>
 
-<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-    <figure class="post__thumbnail">
-		<?php the_post_thumbnail(); ?>
+<a href="<?php the_permalink(); ?>" id="post-<?php the_ID(); ?>" <?php post_class( 'post' ); ?>>
+    <figure class="entry-thumbnail">
+        <?php
+            the_post_thumbnail(
+                'post-thumbnail',
+                array( 'class' => 'entry-thumbnail__image' )
+            );
+        ?>
 	</figure>
 
-    <div class="post__content">
-        <ul class="post__content-summary summary">
-            <?php
-                printf(
-                    '<p class="summary__field"><span>"%s"</span>: <strong>"%s"</strong>,</p>',
-                    __( 'date', 'instapress' ),
-                    get_the_date()
-                );
+    <div class="entry-summary">
+        <?php
+            printf(
+                '<p class="entry-summary__field"><span>"%s"</span>: <strong>"%s"</strong>,</p>',
+                __( 'date', 'instapress' ),
+                get_the_date()
+            );
 
-                printf(
-                    '<p class="summary__field"><span>"%s"</span>: <strong>"%s"</strong>,</p>',
-                    __( 'author', 'instapress' ),
-                    get_the_author()
-                );
+            printf(
+                '<p class="entry-summary__field"><span>"%s"</span>: <strong>"%s"</strong>,</p>',
+                __( 'author', 'instapress' ),
+                get_the_author()
+            );
 
-                printf(
-                    '<p class="summary__field"><span>"%s"</span>: <strong>"%s"</strong></p>',
-                    __( 'title', 'instapress' ),
-                    get_the_title()
-                );
-            ?>
-        </ul>
+            printf(
+                '<p class="entry-summary__field"><span>"%s"</span>: <strong>"%s"</strong></p>',
+                __( 'title', 'instapress' ),
+                get_the_title()
+            );
+        ?>
     </div>
-</article>
+</a>
