@@ -7,28 +7,12 @@
   margin: 0 0 2rem;
   overflow: hidden;
 
-  text-decoration: none;
-
-  @at-root a#{&} {
-    cursor: pointer;
-
-    .entry-thumbnail__image {
-      transition: filter .5s;
-    }
-
-    &:hover {
-      .entry-thumbnail__image {
-        filter: brightness(85%);
-      }
-    }
-  }
+  background-color: lighten($color-dark, 3%);
+  border: 1px solid darken($color-dark, 3%);
+  border-radius: 3px;
 
   &.post--page {
-
-  }
-
-  &.post--image {
-    box-shadow: 0 0 0 1px darken($color-dark, 3%);
-    border-radius: 3px;
+    background-color: transparent;
+    border: none;
   }
 }

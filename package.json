@@ -21,5 +21,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "gulp-flatten": "^0.4.0"
   }
 }

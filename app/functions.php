@@ -35,7 +35,7 @@ function instapress_scripts() {
         $version = wp_get_theme()->get( 'Version' );
     }
 
-    wp_enqueue_script('instapress-script', get_template_directory_uri() . '/assets/scripts.min.js', [], $version, true);
+    wp_enqueue_script('instapress-scripts', get_template_directory_uri() . '/assets/scripts.min.js', array(), $version, true);
 }
 add_action( 'wp_enqueue_scripts', 'instapress_scripts' );
 
@@ -53,7 +53,7 @@ function instapress_styles() {
         $version = wp_get_theme()->get( 'Version' );
     }
 
-    wp_enqueue_style('instapress-style', get_template_directory_uri() . '/assets/styles.min.css', [], $version);
+    wp_enqueue_style('instapress-styles', get_template_directory_uri() . '/assets/styles.min.css', array(), $version);
 }
 add_action( 'wp_enqueue_scripts', 'instapress_styles' );
 
@@ -75,14 +75,6 @@ function instapress_setup() {
 
     // Enable support for Post Thumbnails on posts and pages.
     add_theme_support( 'post-thumbnails' );
-
-    // Enable post formats
-    add_theme_support( 'post-formats',
-        array(
-            'image',
-            'video'
-        )
-    );
 
     // Set post thumbnail default size
     set_post_thumbnail_size( 1280, 9999 );
@@ -175,45 +167,116 @@ function instapress_post_class( $classes, $class, $post_id ) {
         $classes[] = 'post--page';
     }
 
-    if ( is_singular( 'post' ) && has_post_format() ) {
-        $classes[] = 'post--' . get_post_format();
-    }
-
     return $classes;
 }
 add_filter( 'post_class', 'instapress_post_class', 10, 3 );
 
 
 /**
- * Update annoying body classes
+ * Add is- prefix to all body classes
  */
 function instapress_body_class( $wp_classes, $extra_classes ) {
-    $classes = array();
+    $body_classes = $wp_classes + $extra_classes;
 
-    if ( is_archive() ) {
-        $classes[] = 'is-archive';
+    foreach ( $body_classes as &$body_class ) {
+        $body_class = 'is-' . $body_class;
     }
 
-    if ( is_admin_bar_showing() ) {
-        $classes[] = 'is-adminbar';
-    }
+    // Remove link to avoid unexpected behavior
+    unset( $body_class );
 
-    if ( is_front_page() ) {
-        $classes[] = 'is-front';
-    }
-
-    if ( is_singular( 'page' ) && ! is_front_page() ) {
-        $classes[] = 'is-page';
-    }
-
-    if ( is_singular( 'post' ) ) {
-        if ( has_post_format() ) {
-            $classes[] = 'is-' . get_post_format();
-        } else {
-            $classes[] = 'is-post';
-        }
-    }
-
-    return $classes;
+    return $body_classes;
 }
 add_filter( 'body_class', 'instapress_body_class', 10, 2 );
+
+
+/**
+ * Disable block editor for default posts type
+ */
+function instapress_block_editor( $post_type ) {
+    if ( in_array( $post_type, array( 'post', 'page') ) ) {
+        return false;
+    }
+
+    return true;
+}
+add_filter( 'use_block_editor_for_post_type', 'instapress_block_editor', 10, 2 );
+
+
+/**
+ * Remove default editor for posts
+ */
+function instapress_post_editor() {
+    remove_post_type_support( 'post', 'editor');
+}
+add_action( 'init', 'instapress_post_editor' );
+
+
+/**
+ * Move thumbnail metabox to main section for posts
+ */
+function instapress_thumbnail_metabox( $post_type ) {
+    if ( 'post' === $post_type && post_type_supports( $post_type, 'thumbnail' ) ) {
+        // Remove thumbnail metabox to re-create it below
+        remove_meta_box( 'postimagediv', $post_type, 'side' );
+
+        $post_type_object = get_post_type_object( $post_type );
+        $metabox_title = esc_html( $post_type_object->labels->featured_image );
+
+        // Add thumbnail metabox instead of post editor
+        add_meta_box( 'postimagediv', $metabox_title, 'post_thumbnail_meta_box', $post_type, 'normal', 'high' );
+    }
+}
+add_action( 'do_meta_boxes', 'instapress_thumbnail_metabox' );
+
+
+/**
+ * Enqueue admin side postbox image styles
+ */
+function instapress_thumbnail_styles() {
+    if( defined( 'WP_DEBUG' ) && true === WP_DEBUG ) {
+        $version = date( 'U' );
+    } else {
+        $version = wp_get_theme()->get( 'Version' );
+    }
+
+    wp_enqueue_style('instapress-admin-styles', get_template_directory_uri() . '/include/postbox-image.css', array(), $version);
+}
+add_action( 'admin_enqueue_scripts', 'instapress_thumbnail_styles' );
+
+
+/**
+ * Remove useless emojis styles
+ */
+function instapress_remove_emoji() {
+    remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+    remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
+    remove_action( 'wp_print_styles', 'print_emoji_styles' );
+    remove_action( 'admin_print_styles', 'print_emoji_styles' );
+    remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
+    remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );
+    remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
+}
+add_action( 'init', 'instapress_remove_emoji' );
+
+
+/**
+ * Remove wordpress meta for security reasons
+ */
+function instapress_remove_meta() {
+    remove_action( 'wp_head', 'wlwmanifest_link' );
+    remove_action( 'wp_head', 'rsd_link' );
+    remove_action( 'wp_head', 'adjacent_posts_rel_link', 10 );
+    remove_action( 'wp_head', 'rest_output_link_wp_head', 10 );
+    remove_action( 'wp_head', 'wp_oembed_add_discovery_links', 10 );
+}
+add_action( 'init', 'instapress_remove_meta' );
+
+
+/**
+ * We don't use gutenberg for now so it would be better to remove useless styles
+ */
+function instapress_remove_block_styles() {
+    wp_dequeue_style( 'wp-block-library' );
+}
+add_action( 'wp_print_styles', 'instapress_remove_block_styles', 11 );

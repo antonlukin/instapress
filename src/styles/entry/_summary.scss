@@ -1,13 +1,11 @@
 .entry-summary {
   display: block;
 
-  padding: 1rem 2rem;
+  padding: 1rem 1.5rem;
 
   font-family: $font-monospace;
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   color: $color-text;
-
-  background-color: lighten($color-dark, 3%);
 
   &:before {
     content: "{";
@@ -26,11 +24,19 @@
     line-height: 1.65;
 
     span {
-      color: $color-summary-key;
+      color: $color-link;
     }
 
     strong {
-      color: $color-summary-value;
+      color: $color-value;
     }
+
+    @media screen and (max-width: 479px) {
+      margin-left: 1rem;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    padding: 1rem;
   }
 }

@@ -1,15 +1,17 @@
 .entry-header {
   display: block;
+  position: relative;
 
-  margin: 0 0 1rem;
+  margin: 0 0 0.75rem;
 
   .entry-header__title {
-    display: block;
-
-    margin: 0;
-    padding: 0;
-
     font-size: 1.5rem;
     font-weight: 400;
+    line-height: 1.25;
+    letter-spacing: 0.5px;
+
+    @media screen and (max-width: 767px) {
+      font-size: 1.25rem;
+    }
   }
 }

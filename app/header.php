@@ -11,7 +11,6 @@
     <meta charset="<?php bloginfo( 'charset' ); ?>" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#21252b">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/hack-font/3.003/web/hack.css" rel="stylesheet">
 
     <?php wp_head(); ?>
 </head>

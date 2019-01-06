@@ -15,7 +15,7 @@
                 array( 'class' => 'entry-thumbnail__image' )
             );
         ?>
-	</figure>
+    </figure>
 
     <div class="entry-summary">
         <?php
@@ -36,12 +36,6 @@
                 __( 'title', 'instapress' ),
                 get_the_title()
             );
-        ?>
-    </div>
-
-    <div class="entry-content">
-        <?php
-            the_content();
         ?>
     </div>
 </article>

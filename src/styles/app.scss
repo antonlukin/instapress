@@ -4,12 +4,11 @@ $font-monospace: 'Hack', monospace;
 
 // Define color vars
 $color-text: #738699;
+$color-link: #e29949;
 $color-dark: #1a1f28;
-$color-light: #e9e9e9;
+$color-light: #dadada;
+$color-value: #56b6c2;
 $color-select: #343d4e;
-
-$color-summary-key: #e29949;
-$color-summary-value: #56b6c2;
 
 // Define content width
 $width-content: 40rem;
@@ -20,15 +19,13 @@ $width-content: 40rem;
 body {
   display: block;
 
-  line-height: 1.4;
+  line-height: 1.5;
   font-size: 16px;
   font-weight: normal;
   font-family: $font-regular;
 
   color: $color-light;
   background-color: $color-dark;
-
-  will-change: transform;
 }
 
 ::selection {

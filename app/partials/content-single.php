@@ -15,7 +15,7 @@
                 array( 'class' => 'entry-thumbnail__image' )
             );
         ?>
-	</figure>
+    </figure>
 
     <div class="entry-summary">
         <?php
