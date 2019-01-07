@@ -20,12 +20,21 @@
     color: $color-link;
     text-decoration: none;
 
-    border-bottom: 1px solid $color-link;
-    transition: border 0.25s;
-
     &:hover {
-      border-bottom-color: transparent;
+      color: darken($color-link, 10%);
+
+      img {
+        filter: brightness(85%);
+      }
     }
+  }
+
+  img {
+    display: block;
+
+    border: 1px solid darken($color-dark, 3%);
+    border-radius: 3px;
+    transition: filter 0.25s;
   }
 
   strong, b {
@@ -53,7 +62,7 @@
     font-family: $font-monospace;
     font-size: 0.75rem;
 
-    color: darken($color-light, 15%);
+    color: darken($color-text, 15%);
     background-color: lighten($color-dark, 3%);
 
     border: 1px solid darken($color-dark, 3%);
@@ -133,11 +142,54 @@
 
   blockquote {
     padding-left: calc(2rem - 2px);
-
     border-left: 2px solid $color-value;
+
+    p {
+      font-style: italic;
+    }
 
     @media screen and (max-width: 767px) {
       padding-left: calc(1.5rem - 2px);
     }
+  }
+
+  .wp-caption {
+    max-width: 100%;
+    overflow: hidden;
+
+    color: darken($color-text, 15%);
+    background-color: lighten($color-dark, 3%);
+
+    border: 1px solid darken($color-dark, 3%);
+    border-radius: 3px;
+
+    img {
+      border: none;
+      border-radius: 0;
+    }
+
+    .wp-caption-text {
+      padding: 0.5rem;
+      font-size: 0.75rem;
+    }
+  }
+
+  .alignnone {
+    margin: 0 1rem 1rem 0;
+  }
+
+  .aligncenter {
+    display: block;
+    margin: 0 auto;
+  }
+
+  .alignright {
+    float: right;
+    margin: 0 0 1rem 1rem;
+  }
+
+  .alignleft {
+    float: left;
+    margin: 0 1rem 1rem 0;
   }
 }

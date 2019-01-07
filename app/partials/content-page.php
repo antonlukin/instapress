@@ -1,6 +1,6 @@
 <?php
 /**
- * Template part for displaying pages
+ * Page content template part
  *
  * @package instapress
  * @since 1.0

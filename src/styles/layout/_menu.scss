@@ -22,14 +22,14 @@
     border-bottom: 1px solid transparent;
 
     &.menu__item--current {
-      border-bottom-color: $color-light;
+      border-bottom-color: $color-text;
 
       .menu__item-link {
-        color: $color-light;
+        color: $color-text;
       }
 
       .menu__item-link:hover {
-        color: $color-light;
+        color: $color-text;
       }
     }
   }
@@ -40,15 +40,16 @@
     padding: .375rem 0.625rem;
     overflow: hidden;
 
-    color: $color-text;
-    text-decoration: none;
+    color: $color-utility;
     text-overflow: ellipsis;
     white-space: nowrap;
 
     transition: color .25s;
 
+    border-bottom: none;
+
     &:hover {
-      color: lighten($color-text, 10%);
+      color: lighten($color-utility, 10%);
     }
   }
 }

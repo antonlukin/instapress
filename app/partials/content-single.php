@@ -1,6 +1,6 @@
 <?php
 /**
- * Template part for displaying posts
+ * Single content template part
  *
  * @package instapress
  * @since 1.0
@@ -11,7 +11,7 @@
     <figure class="entry-thumbnail">
         <?php
             the_post_thumbnail(
-                'post-thumbnail',
+                'instapress-image',
                 array( 'class' => 'entry-thumbnail__image' )
             );
         ?>

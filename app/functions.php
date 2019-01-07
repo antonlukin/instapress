@@ -77,7 +77,10 @@ function instapress_setup() {
     add_theme_support( 'post-thumbnails' );
 
     // Set post thumbnail default size
-    set_post_thumbnail_size( 1280, 9999 );
+    set_post_thumbnail_size( 300, 300, true );
+
+    // Add primary image size
+    add_image_size( 'instapress-image', 1200, 900, true );
 
     // This theme uses wp_nav_menu() in header and footer.
     register_nav_menus(
@@ -98,6 +101,26 @@ function instapress_setup() {
     );
 }
 add_action( 'after_setup_theme', 'instapress_setup' );
+
+
+/**
+ * Update default media sizes on theme setup
+ */
+function instapress_media_size() {
+    // Thumbnail size
+	update_option( 'thumbnail_size_w', 300 );
+	update_option( 'thumbnail_size_h', 300 );
+    update_option( 'thumbnail_crop', 1 );
+
+    // Medium image size
+	update_option( 'medium_size_w', 600 );
+    update_option( 'medium_size_h', 450 );
+
+    // Large image
+	update_option( 'large_size_w', 1200 );
+	update_option( 'large_size_h', 900 );
+}
+add_action( 'switch_theme', 'instapress_media_size' );
 
 
 /**
@@ -163,8 +186,8 @@ function instapress_post_class( $classes, $class, $post_id ) {
 		$classes = array_map( 'esc_attr', $class );
     }
 
-    if ( is_singular( 'page' ) ) {
-        $classes[] = 'post--page';
+    if( 'post' === get_post_type( $post_id ) ) {
+        $classes[] = 'post--image';
     }
 
     return $classes;
@@ -280,3 +303,43 @@ function instapress_remove_block_styles() {
     wp_dequeue_style( 'wp-block-library' );
 }
 add_action( 'wp_print_styles', 'instapress_remove_block_styles', 11 );
+
+
+/**
+ * Disable post attachment pages and redirect to post parent if exists
+ */
+function instapress_attachment_template() {
+    global $post;
+
+    if ( is_attachment() ) {
+        if ( isset( $post->post_parent ) && absint( $post->post_parent ) > 0 ) {
+            $url = get_permalink( $post->post_parent );
+        } else {
+            $url = home_url( '/' );
+        }
+
+        wp_redirect( esc_url( $url ), 301 );
+        exit;
+    }
+}
+add_action( 'template_redirect', 'instapress_attachment_template' );
+
+
+/**
+ * Add footer description field to customizer
+ */
+function instapress_footer_settings( $wp_customize ) {
+    $wp_customize->add_setting( 'footer-copy' );
+
+    $options = array(
+        'label' => __('Описание в подвале', 'instapress'),
+        'section' => 'title_tagline',
+        'code_type' => 'text/html',
+        'priority' => 15
+    );
+
+    $control = new WP_Customize_Code_Editor_Control( $wp_customize, 'footer-copy', $options );
+
+    $wp_customize->add_control( $control );
+}
+add_action( 'customize_register', 'instapress_footer_settings' );

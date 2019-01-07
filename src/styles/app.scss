@@ -3,12 +3,13 @@ $font-regular: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', Helve
 $font-monospace: 'Hack', monospace;
 
 // Define color vars
-$color-text: #738699;
+$color-text: #dadada;
 $color-link: #e29949;
 $color-dark: #1a1f28;
-$color-light: #dadada;
+
 $color-value: #56b6c2;
 $color-select: #343d4e;
+$color-utility: #738699;
 
 // Define content width
 $width-content: 40rem;
@@ -24,8 +25,14 @@ body {
   font-weight: normal;
   font-family: $font-regular;
 
-  color: $color-light;
+  color: $color-text;
   background-color: $color-dark;
+}
+
+a {
+  text-decoration: none;
+  border-bottom: 1px solid;
+  transition: color .25s;
 }
 
 ::selection {
