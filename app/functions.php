@@ -77,10 +77,7 @@ function instapress_setup() {
     add_theme_support( 'post-thumbnails' );
 
     // Set post thumbnail default size
-    set_post_thumbnail_size( 300, 300, true );
-
-    // Add primary image size
-    add_image_size( 'instapress-image', 1200, 900, true );
+    set_post_thumbnail_size( 1200, 900, true );
 
     // This theme uses wp_nav_menu() in header and footer.
     register_nav_menus(
@@ -93,10 +90,9 @@ function instapress_setup() {
     add_theme_support( 'html5',
         array(
             'search-form',
-            'comment-form',
-            'comment-list',
             'gallery',
             'caption',
+            'comment-list'
         )
     );
 }
@@ -108,17 +104,9 @@ add_action( 'after_setup_theme', 'instapress_setup' );
  */
 function instapress_media_size() {
     // Thumbnail size
-	update_option( 'thumbnail_size_w', 300 );
-	update_option( 'thumbnail_size_h', 300 );
+	update_option( 'thumbnail_size_w', 1200 );
+	update_option( 'thumbnail_size_h', 900 );
     update_option( 'thumbnail_crop', 1 );
-
-    // Medium image size
-	update_option( 'medium_size_w', 600 );
-    update_option( 'medium_size_h', 450 );
-
-    // Large image
-	update_option( 'large_size_w', 1200 );
-	update_option( 'large_size_h', 900 );
 }
 add_action( 'switch_theme', 'instapress_media_size' );
 
@@ -129,15 +117,13 @@ add_action( 'switch_theme', 'instapress_media_size' );
  * Applies to menu in primary theme location only
  */
 function instapress_menu_classes( $classes, $item, $args ) {
-    // Redefine classes array
-    $classes = array();
-
     if( $args->theme_location === 'primary' ) {
-        $classes[] = 'menu__item';
-    }
+        // Redefine classes array
+        $classes = array( 'menu-item' );
 
-    if( $item->current === true ) {
-        $classes[] = 'menu__item--current';
+        if( $item->current === true ) {
+            $classes[] = 'menu-item-current';
+        }
     }
 
     return $classes;
@@ -151,10 +137,12 @@ add_filter( 'nav_menu_css_class', 'instapress_menu_classes', 10, 3 );
  * Just remove this filter if you want to use menu item id
  * Applies to menu in primary theme location only
  */
-function instapress_menu_item_id() {
-    return '';
+function instapress_menu_item_id( $classes, $item, $args ) {
+    if( $args->theme_location === 'primary' ) {
+        return '';
+    }
 }
-add_filter( 'nav_menu_item_id', 'instapress_menu_item_id' );
+add_filter( 'nav_menu_item_id', 'instapress_menu_item_id', 10, 3 );
 
 
 /**
@@ -164,7 +152,7 @@ add_filter( 'nav_menu_item_id', 'instapress_menu_item_id' );
  */
 function instapress_menu_link_class( $atts, $item, $args ) {
     if ( $args->theme_location === 'primary' ) {
-        $atts['class'] = 'menu__item-link';
+        $atts['class'] = 'menu-item-link';
     }
 
     return $atts;
@@ -186,8 +174,12 @@ function instapress_post_class( $classes, $class, $post_id ) {
 		$classes = array_map( 'esc_attr', $class );
     }
 
-    if( 'post' === get_post_type( $post_id ) ) {
-        $classes[] = 'post--image';
+    $post_type = get_post_type( $post_id );
+
+    if( 'post' === $post_type ) {
+        $classes[] = 'post-image';
+    } else {
+        $classes[] = 'post-' . $post_type;
     }
 
     return $classes;
@@ -202,7 +194,10 @@ function instapress_body_class( $wp_classes, $extra_classes ) {
     $body_classes = $wp_classes + $extra_classes;
 
     foreach ( $body_classes as &$body_class ) {
-        $body_class = 'is-' . $body_class;
+        // Skip no-customize-support class
+        if ( 'no-customize-support' !== $body_class ) {
+            $body_class = 'is-' . $body_class;
+        }
     }
 
     // Remove link to avoid unexpected behavior
@@ -343,3 +338,119 @@ function instapress_footer_settings( $wp_customize ) {
     $wp_customize->add_control( $control );
 }
 add_action( 'customize_register', 'instapress_footer_settings' );
+
+
+/**
+ * Enqueue comment-reply script
+ */
+function instapress_comments_scripts() {
+    if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
+		wp_enqueue_script( 'comment-reply' );
+	}
+}
+add_action( 'wp_enqueue_scripts', 'instapress_comments_scripts' );
+
+
+/**
+ * Upgrade comment form args
+ *
+ * Remove information strings and reply title
+ */
+function instapress_comment_form_defaults( $defaults ) {
+    $args = array(
+        'logged_in_as'         => '',
+        'must_log_in'          => '',
+        'title_reply_before'   => '',
+        'title_reply_after'    => '',
+        'title_reply'          => '',
+        'title_reply_to'       => '',
+        'comment_notes_before' => '',
+        'cancel_reply_before'  => '',
+		'cancel_reply_after'   => '',
+        'submit_button'        => '<button name="%1$s" type="submit" id="%2$s" class="%3$s">%4$s</button>',
+        'submit_field'         => '<div class="comments-submit">%1$s %2$s</div>',
+    );
+
+    return wp_parse_args( $args, $defaults );
+}
+add_filter( 'comment_form_defaults', 'instapress_comment_form_defaults' );
+
+
+/**
+ * Remove labels from comment fields
+ */
+function instapress_comment_form_fields( $fields ) {
+    $commenter = wp_get_current_commenter();
+
+    $requred = (string) null;
+    if ( get_option( 'require_name_email' ) ) {
+        $requred = ' required="required"';
+    }
+
+    $fields['comment'] = sprintf(
+        '<p><textarea id="comment" name="comment" placeholder="%s" required></textarea></p>',
+        __( 'Leave a Reply' )
+    );
+
+    $fields['author'] = sprintf(
+        '<p><input id="author" name="author" type="text" value="%s" placeholder="%s" maxlength="245"%s></p>',
+        esc_attr( $commenter['comment_author'] ),
+        __( 'Name' ), $requred
+    );
+
+    $fields['email'] = sprintf(
+        '<p><input id="email" name="email" type="email" value="%s" placeholder="%s" maxlength="100"%s></p>',
+        esc_attr( $commenter['comment_author_email'] ),
+        __( 'Email' ), $requred
+    );
+
+    $fields['url'] = sprintf(
+        '<p><input id="url" name="url" type="url" value="%s" placeholder="%s" maxlength="200"></p>',
+        esc_attr( $commenter['comment_author_url'] ),
+        __( 'Website' )
+    );
+
+    return $fields;
+}
+add_filter( 'comment_form_fields', 'instapress_comment_form_fields' );
+
+
+/**
+ * Remove comment reply link if user not logged in and comment registration required
+ */
+function instapress_comment_reply_link( $link ) {
+    if ( get_option( 'comment_registration' ) && ! is_user_logged_in() ) {
+		$link = (string) null;
+    }
+
+    return $link;
+}
+add_filter( 'comment_reply_link', 'instapress_comment_reply_link' );
+
+
+/**
+ * Delete cancel comment reply link to recreate it below
+ */
+add_filter( 'cancel_comment_reply_link', '__return_empty_string' );
+
+
+/**
+ * Delete cancel comment reply link to recreate it below
+ */
+function instapress_comment_form_submit_button( $submit_button, $args ) {
+    $link = remove_query_arg( array( 'replytocom', 'unapproved', 'moderation-hash' ) );
+
+    $display = (string) null;
+    if ( empty( $_GET['replytocom'] ) ) {
+        $display = ' style="display: none;"';
+    }
+
+	$cancel_link = sprintf(
+        '<a id="cancel-comment-reply-link" class="comment-reply-cancel" href="%1s"rel="nofollow"%3$s>%2$s</a>',
+        esc_html( $link ) . '#respond',
+        __( 'Cancel reply' ), $display
+    );
+
+    return $submit_button . $cancel_link;
+}
+add_filter( 'comment_form_submit_button', 'instapress_comment_form_submit_button', 10, 2 );

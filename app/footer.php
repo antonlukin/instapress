@@ -8,7 +8,7 @@
 ?>
 
 <footer class="footer">
-    <div class="footer__copy">
+    <div class="footer-copy">
         <?php
             echo get_theme_mod( 'footer-copy', '' );
         ?>

@@ -8,10 +8,10 @@
   }
 
   #postbox-container-2 #postimagediv .inside {
-    margin: 1em auto;
     max-width: 640px;
-    background: #fff;
+    margin: 1em auto;
     padding: 0 1em;
+    background: #fff;
     border: 1px solid #e5e5e5;
   }
 }

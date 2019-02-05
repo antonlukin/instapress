@@ -5,7 +5,7 @@
 
   font-family: $font-monospace;
   font-size: 0.6875rem;
-  color: $color-text;
+  color: $color-utility;
 
   &:before {
     content: "{";
@@ -17,7 +17,7 @@
     display: block;
   }
 
-  .entry-summary__field {
+  .entry-summary-field {
     display: block;
 
     margin-left: 2rem;

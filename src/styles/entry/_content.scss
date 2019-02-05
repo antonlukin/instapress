@@ -78,7 +78,6 @@
 
     font-weight: 400;
     line-height: 1.125;
-    letter-spacing: 0.5px;
   }
 
   h4, h5, h6 {
@@ -92,22 +91,27 @@
 
   h1 {
     font-size: 1.5rem;
+    letter-spacing: 0.5px;
 
     @media screen and (max-width: 767px) {
       font-size: 1.25rem;
+      letter-spacing: 0.25px;
     }
   }
 
   h2 {
     font-size: 1.25rem;
+    letter-spacing: 0.5px;
 
     @media screen and (max-width: 767px) {
       font-size: 1.125rem;
+      letter-spacing: 0.25px;
     }
   }
 
   h3 {
     font-size: 1rem;
+    letter-spacing: 0.25px;
   }
 
   hr {

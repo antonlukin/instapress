@@ -11,31 +11,31 @@
     <figure class="entry-thumbnail">
         <?php
             the_post_thumbnail(
-                'instapress-image',
+                'post-thumbnail',
                 array( 'class' => 'entry-thumbnail__image' )
             );
         ?>
     </figure>
 
-    <div class="entry-summary">
+    <footer class="entry-summary">
         <?php
             printf(
-                '<p class="entry-summary__field"><span>"%s"</span>: <strong>"%s"</strong>,</p>',
+                '<p class="entry-summary-field"><span>"%s"</span>: <strong>"%s"</strong>,</p>',
                 __( 'date', 'instapress' ),
                 get_the_date()
             );
 
             printf(
-                '<p class="entry-summary__field"><span>"%s"</span>: <strong>"%s"</strong>,</p>',
+                '<p class="entry-summary-field"><span>"%s"</span>: <strong>"%s"</strong>,</p>',
                 __( 'author', 'instapress' ),
                 get_the_author()
             );
 
             printf(
-                '<p class="entry-summary__field"><span>"%s"</span>: <strong>"%s"</strong></p>',
+                '<p class="entry-summary-field"><span>"%s"</span>: <strong>"%s"</strong></p>',
                 __( 'title', 'instapress' ),
                 get_the_title()
             );
         ?>
-    </div>
+    </footer>
 </article>

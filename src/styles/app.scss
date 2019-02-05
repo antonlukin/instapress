@@ -4,9 +4,10 @@ $font-monospace: 'Hack', monospace;
 
 // Define color vars
 $color-text: #dadada;
-$color-link: #e29949;
+$color-link: #e0923c;
 $color-dark: #1a1f28;
 
+$color-fields: #272d38;
 $color-value: #56b6c2;
 $color-select: #343d4e;
 $color-utility: #738699;
@@ -27,12 +28,69 @@ body {
 
   color: $color-text;
   background-color: $color-dark;
+
+  -webkit-text-size-adjust: none;
 }
 
 a {
   text-decoration: none;
   border-bottom: 1px solid;
   transition: color .25s;
+}
+
+button {
+  display: block;
+  cursor: pointer;
+  outline: none;
+
+  max-width: 100%;
+  padding: 0.5rem;
+  overflow: hidden;
+
+  line-height: 1.5;
+  font-size: 0.8125rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  color: $color-dark;
+  background-color: $color-link;
+
+  border: 1px solid transparent;
+  border-radius: 2px;
+
+  transition: background-color .25s;
+
+  &:hover {
+    background-color: darken($color-link, 5%);
+  }
+}
+
+input,
+textarea {
+  display: block;
+  outline: none;
+
+  width: 100%;
+  padding: 0.5rem;
+  line-height: 1.5;
+  font-size: 0.8125rem;
+  font-weight: 300;
+
+  color: $color-text;
+  background-color: lighten($color-dark, 3%);
+
+  border: 1px solid darken($color-dark, 3%);
+  border-radius: 2px;
+
+  transition: background-color .25s;
+
+  &:focus {
+    background-color: lighten($color-dark, 5%);
+  }
+
+  &::placeholder {
+    color: darken($color-utility, 15%);
+  }
 }
 
 ::selection {
@@ -44,3 +102,6 @@ a {
 
 // Import entry styles
 @import "entry/*.scss";
+
+// Import comments styles
+@import "comments/*.scss";

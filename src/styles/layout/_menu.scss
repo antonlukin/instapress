@@ -12,41 +12,37 @@
 
   border-bottom: solid 1px lighten($color-dark, 10%);
 
-  .menu__item {
+  .menu-item {
     display: block;
     position: relative;
 
     margin-bottom: -1px;
-    overflow: hidden;
 
     border-bottom: 1px solid transparent;
 
-    &.menu__item--current {
+    &.menu-item-current {
       border-bottom-color: $color-text;
 
-      .menu__item-link {
+      .menu-item-link {
         color: $color-text;
       }
 
-      .menu__item-link:hover {
+      .menu-item-link:hover {
         color: $color-text;
       }
     }
   }
 
-  .menu__item-link {
+  .menu-item-link {
     display: block;
 
     padding: .375rem 0.625rem;
-    overflow: hidden;
-
-    color: $color-utility;
-    text-overflow: ellipsis;
     white-space: nowrap;
 
-    transition: color .25s;
+    color: $color-utility;
 
     border-bottom: none;
+    transition: color .25s;
 
     &:hover {
       color: lighten($color-utility, 10%);
