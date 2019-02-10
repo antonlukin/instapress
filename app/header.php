@@ -22,10 +22,11 @@
         if ( has_nav_menu( 'primary' ) ) :
             wp_nav_menu( array(
                 'theme_location' => 'primary',
-                'echo' => true,
-                'depth' => 1,
+                'container' => 'nav',
+                'container_class' => 'header-menu',
                 'items_wrap' => '<ul class="menu">%3$s</ul>',
-                'container' => 'false'
+                'echo' => true,
+                'depth' => 1
             ) );
         endif;
     ?>

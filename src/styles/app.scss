@@ -8,8 +8,7 @@ $color-link: #e0923c;
 $color-dark: #21252b;
 
 $color-value: #56b6c2;
-$color-select: #343d4e;
-$color-utility: #738699;
+$color-utility: #717e8c;
 
 // Define content width
 $width-content: 40rem;
@@ -103,7 +102,7 @@ textarea {
 }
 
 ::selection {
-  background-color: rgba($color-select, 0.75);
+  background-color: rgba(dimgrey, 0.75);
 }
 
 // Import layout styles

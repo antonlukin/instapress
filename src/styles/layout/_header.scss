@@ -7,6 +7,32 @@
   margin: 0 auto;
   padding: 1rem 1.25rem;
 
+  .header-menu {
+    display: block;
+    position: relative;
+
+    width: $width-content;
+    max-width: 100%;
+    margin: 1rem auto 0.5rem;
+
+    border-bottom: solid 1px lighten($color-dark, 10%);
+
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 1;
+      pointer-events: none;
+
+      height: 100%;
+      width: 1.5rem;
+
+      background: linear-gradient(90deg, rgba($color-dark, 0), $color-dark);
+    }
+  }
+
   @media screen and (max-width: 479px) {
     padding: 0.75rem;
   }
