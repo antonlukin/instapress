@@ -5,9 +5,8 @@ $font-monospace: 'Hack', monospace;
 // Define color vars
 $color-text: #dadada;
 $color-link: #e0923c;
-$color-dark: #1a1f28;
+$color-dark: #21252b;
 
-$color-fields: #272d38;
 $color-value: #56b6c2;
 $color-select: #343d4e;
 $color-utility: #738699;
@@ -17,6 +16,7 @@ $width-content: 40rem;
 
 // Setup default styles
 @import "config/*.scss";
+
 
 body {
   display: block;
@@ -29,7 +29,16 @@ body {
   color: $color-text;
   background-color: $color-dark;
 
+  will-change: transform;
   -webkit-text-size-adjust: none;
+
+  &.is-admin-bar {
+    padding-top: 32px;
+
+    @media screen and (max-width: 782px) {
+      padding-top: 46px;
+    }
+  }
 }
 
 a {

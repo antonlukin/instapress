@@ -4,8 +4,10 @@
 
   width: 100%;
 
-  img {
+  .entry-thumbnail-image {
     width: 100%;
     height: auto;
+
+    transition: filter 0.25s;
   }
 }

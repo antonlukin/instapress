@@ -8,34 +8,29 @@
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'post' ); ?>>
+    <?php
+        if ( get_theme_mod( 'instapress_internal_pages' ) === 'enable' ) {
+            printf(
+                '<a class="entry-permalink" href="%s"></a>',
+                esc_url( get_permalink() )
+            );
+        }
+    ?>
+
     <figure class="entry-thumbnail">
         <?php
             the_post_thumbnail(
                 'post-thumbnail',
-                array( 'class' => 'entry-thumbnail__image' )
+                array( 'class' => 'entry-thumbnail-image' )
             );
         ?>
     </figure>
 
     <footer class="entry-summary">
         <?php
-            printf(
-                '<p class="entry-summary-field"><span>"%s"</span>: <strong>"%s"</strong>,</p>',
-                __( 'date', 'instapress' ),
-                get_the_date()
-            );
-
-            printf(
-                '<p class="entry-summary-field"><span>"%s"</span>: <strong>"%s"</strong>,</p>',
-                __( 'author', 'instapress' ),
-                get_the_author()
-            );
-
-            printf(
-                '<p class="entry-summary-field"><span>"%s"</span>: <strong>"%s"</strong></p>',
-                __( 'title', 'instapress' ),
-                get_the_title()
-            );
+            if ( function_exists( 'instapress_show_summary' ) ) {
+                instapress_show_summary();
+            }
         ?>
     </footer>
 </article>

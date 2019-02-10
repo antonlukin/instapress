@@ -19,6 +19,7 @@
 
   .entry-summary-field {
     display: block;
+    cursor: default;
 
     margin-left: 2rem;
     line-height: 1.65;
@@ -29,6 +30,10 @@
 
     strong {
       color: $color-value;
+    }
+
+    &:not(:last-child):after {
+      content: ',';
     }
 
     @media screen and (max-width: 479px) {

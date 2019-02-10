@@ -3,20 +3,10 @@
   position: relative;
 
   width: 100%;
-  margin-bottom: 2rem;
-
-  .comment-title {
-    display: block;
-    cursor: default;
-
-    font-size: 1rem;
-    line-height: 1.25;
-    letter-spacing: 0.25px;
-  }
+  margin: 2rem 0;
 
   .comment-list {
     display: block;
-    margin-top: 1.5rem;
   }
 
   .comment-body {
@@ -102,7 +92,9 @@
     }
 
     textarea {
-      height: 6rem;
+      min-height: 6rem;
+
+      resize: vertical;
     }
   }
 

@@ -19,11 +19,6 @@ if ( post_password_required() ) {
     <?php
 		if ( have_comments() ) {
 			printf(
-				'<p class="comment-title">%s</p>',
-				__('Comments')
-			);
-
-			printf(
 				'<div class="comment-list">%s</div>',
 
 				wp_list_comments(

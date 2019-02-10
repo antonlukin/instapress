@@ -8,11 +8,14 @@
 ?>
 
 <footer class="footer">
-    <div class="footer-copy">
-        <?php
-            echo get_theme_mod( 'footer-copy', '' );
-        ?>
-    </div>
+    <?php
+        if ( get_theme_mod( 'instapress_footer_copy' ) ) {
+            printf(
+                '<div class="footer-copy">%s</div>',
+                get_theme_mod( 'instapress_footer_copy', '' )
+            );
+        }
+    ?>
 </footer>
 
 <?php wp_footer(); ?>
