@@ -1,0 +1,26 @@
+#instapress-thumbnail-metabox .inside {
+  margin: 0;
+  padding: 12px;
+
+  background-color: #f5f5f5;
+}
+
+#instapress-thumbnail-metabox .thumbnail-placeholder {
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  justify-content: center;
+
+  height: 150px;
+  margin: 0;
+  padding: 12px 10px;
+
+  font-size: 16px;
+  color: #a0a5aa;
+
+  border: 2px dashed #ccc;
+}
+
+#instapress-thumbnail-metabox .thumbnail-placeholder .button {
+  margin-top: 15px;
+}

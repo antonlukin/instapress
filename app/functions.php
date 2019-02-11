@@ -224,43 +224,112 @@ add_filter( 'use_block_editor_for_post_type', 'instapress_block_editor', 10, 2 )
 /**
  * Remove default editor for posts
  */
-function instapress_post_editor() {
+function instapress_remove_post_editor() {
     remove_post_type_support( 'post', 'editor');
 }
-add_action( 'init', 'instapress_post_editor' );
+add_action( 'init', 'instapress_remove_post_editor' );
 
 
 /**
- * Move thumbnail metabox to main section for posts
+ * Remove thumbnail support from posts
  */
-function instapress_thumbnail_metabox( $post_type ) {
-    if ( 'post' === $post_type && post_type_supports( $post_type, 'thumbnail' ) ) {
-        // Remove thumbnail metabox to re-create it below
-        remove_meta_box( 'postimagediv', $post_type, 'side' );
-
-        $post_type_object = get_post_type_object( $post_type );
-        $metabox_title = esc_html( $post_type_object->labels->featured_image );
-
-        // Add thumbnail metabox instead of post editor
-        add_meta_box( 'postimagediv', $metabox_title, 'post_thumbnail_meta_box', $post_type, 'normal', 'high' );
-    }
+function instapress_remove_post_thumbnail() {
+    remove_post_type_support( 'post', 'thumbnail' );
 }
-add_action( 'do_meta_boxes', 'instapress_thumbnail_metabox' );
+add_action( 'init', 'instapress_remove_post_thumbnail' );
 
 
 /**
- * Enqueue admin side postbox image styles
+ * Remove default taxes support from posts
  */
-function instapress_thumbnail_styles() {
-    if( defined( 'WP_DEBUG' ) && true === WP_DEBUG ) {
-        $version = date( 'U' );
-    } else {
-        $version = wp_get_theme()->get( 'Version' );
+function instapress_unregister_post_taxes() {
+    // Unregister tags
+    unregister_taxonomy_for_object_type( 'post_tag', 'post' );
+
+    // Unregister categories
+    unregister_taxonomy_for_object_type( 'category', 'post' );
+}
+add_action( 'init', 'instapress_unregister_post_taxes' );
+
+
+/**
+ * Enqueue admin side thumbnail metabox assets
+ */
+function instapress_thumbnail_assets() {
+    $screen = get_current_screen();
+
+    if ( is_object( $screen ) && 'post' === $screen->post_type ) {
+        $include = get_template_directory_uri() . '/include';
+
+        if( defined( 'WP_DEBUG' ) && true === WP_DEBUG ) {
+            $version = date( 'U' );
+        } else {
+            $version = wp_get_theme()->get( 'Version' );
+        }
+
+        // Insert wp media scripts
+        wp_enqueue_media();
+
+        // Insert admin styles
+        wp_enqueue_style( 'instapress-thumbnail', $include . '/styles/thumbnail-metabox.css', array(), $version );
+
+        // Insert admin scripts
+        wp_enqueue_script( 'instapress-thumbnail', $include . '/scripts/thumbnail-metabox.js', array( 'jquery' ), $version );
+    }
+}
+add_action( 'admin_enqueue_scripts', 'instapress_thumbnail_assets' );
+
+
+/**
+ * Add custom thumbnail metabox
+ */
+function instapress_thumbnail_metabox() {
+    $label = _x( 'Featured Image', 'custom thumbnail metabox title', 'instapress' );
+
+    add_meta_box( 'instapress-thumbnail-metabox', $label, 'instapress_thumbnail_callback', 'post', 'normal', 'high' );
+}
+add_action( 'add_meta_boxes', 'instapress_thumbnail_metabox', 20 );
+
+
+/**
+ * Custom thumnbnail metabox callback
+ */
+function instapress_thumbnail_callback( $post, $meta ) {
+    $upload_iframe_src = get_upload_iframe_src( 'image', $post->ID );
+
+    printf( '<div class="thumbnail-placeholder">%3$s <a href="%1$s" class="button">%2$s</a></div>',
+        esc_url( $upload_iframe_src ),
+        __( 'Set featured image', 'instapress' ),
+        __( 'No image selected', 'instapress' )
+	);
+}
+
+
+/**
+ * Sabe custom thumbnail metabox
+ */
+function instapress_thumbnail_save( $post_id ) {
+    $nonce = 'instapress_thumbnail_nonce';
+
+    if ( empty( $_POST[$nonce] ) ) {
+        return;
     }
 
-    wp_enqueue_style('instapress-admin-styles', get_template_directory_uri() . '/include/postbox-image.css', array(), $version);
+    if( ! wp_verify_nonce( $_POST[ $nonce ], 'metabox' ) ) {
+        return;
+    }
+
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+        return;
+    }
+
+    if ( ! current_user_can( 'edit_post', $post_id ) ) {
+        return;
+    }
+
+   // update_post_meta( $post_id, self::$meta_options, $_REQUEST[self::$meta_options]);
 }
-add_action( 'admin_enqueue_scripts', 'instapress_thumbnail_styles' );
+add_action( 'save_post', 'instapress_thumbnail_save' );
 
 
 /**

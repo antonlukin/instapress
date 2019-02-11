@@ -10,7 +10,11 @@
   }
 
   &.post-image {
+    width: calc(100% + 2px);
+    margin-left: -1px;
+    margin-right: -1px;
     overflow: hidden;
+
     background-color: lighten($color-dark, 3%);
 
     border: 1px solid darken($color-dark, 3%);

@@ -30,6 +30,7 @@ body {
 
   will-change: transform;
   -webkit-text-size-adjust: none;
+  -ms-text-size-adjust: 100%;
 
   &.is-admin-bar {
     padding-top: 32px;

@@ -9,5 +9,6 @@
     height: auto;
 
     transition: filter 0.25s;
+    will-change: transform;
   }
 }
