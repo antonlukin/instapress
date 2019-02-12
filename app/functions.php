@@ -295,13 +295,24 @@ add_action( 'add_meta_boxes', 'instapress_thumbnail_metabox', 20 );
  * Custom thumnbnail metabox callback
  */
 function instapress_thumbnail_callback( $post, $meta ) {
-    $upload_iframe_src = get_upload_iframe_src( 'image', $post->ID );
+    $thumbnail = get_post_meta( $post->ID, '_thumbnail_id', true );
+
+    if ( $thumbnail && get_post( $thumbnail ) ) {
+        printf( '<div class="thumbnail-image"><img src="%s" alt="%s"></div>',
+            wp_get_attachment_image_url( $thumbnail, 'post-thumbnail' ),
+            esc_html( $post->post_title )
+        );
+    }
 
     printf( '<div class="thumbnail-placeholder">%3$s <a href="%1$s" class="button">%2$s</a></div>',
-        esc_url( $upload_iframe_src ),
+        esc_url( get_upload_iframe_src( 'image', $post->ID ) ),
         __( 'Set featured image', 'instapress' ),
         __( 'No image selected', 'instapress' )
-	);
+    );
+
+    printf( '<input type="hidden" name="_thumbnail_id" value="%s">',
+        esc_attr( $thumbnail ? $thumbnail : '-1' )
+    );
 }
 
 
