@@ -10,8 +10,7 @@
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'post' ); ?>>
     <figure class="entry-thumbnail">
         <?php
-            the_post_thumbnail(
-                'post-thumbnail',
+            the_post_thumbnail( 'featured',
                 array( 'class' => 'entry-thumbnail-image' )
             );
         ?>

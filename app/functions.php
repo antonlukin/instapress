@@ -9,18 +9,6 @@
  * @since 1.0
  */
 
-/**
- * Set the content width in pixels, based on the theme's design and stylesheet.
- *
- * @global int $content_width Content width.
- */
-function instapress_content_width() {
-    global $content_width;
-
-	$content_width = apply_filters( 'instapress_content_width', 640 );
-}
-add_action( 'after_setup_theme', 'instapress_content_width', 0 );
-
 
 /**
  * Insert required js files
@@ -77,7 +65,10 @@ function instapress_setup() {
     add_theme_support( 'post-thumbnails' );
 
     // Set post thumbnail default size
-    set_post_thumbnail_size( 1200, 900, true );
+    set_post_thumbnail_size( 300, 300, true );
+
+    // Add custom thumbnail image size
+    add_image_size( 'featured', 1200, 900, true );
 
     // This theme uses wp_nav_menu() in header and footer.
     register_nav_menus(
@@ -100,15 +91,16 @@ add_action( 'after_setup_theme', 'instapress_setup' );
 
 
 /**
- * Update default media sizes on theme setup
+ * Add custom intermediate size
  */
-function instapress_media_size() {
-    // Thumbnail size
-	update_option( 'thumbnail_size_w', 1200 );
-	update_option( 'thumbnail_size_h', 900 );
-    update_option( 'thumbnail_crop', 1 );
+function instapress_image_size_names( $size_names ) {
+	$size_names = array_merge( $size_names, array(
+        'featured' => __( 'Featured image', 'instapress' )
+    ) );
+
+	return $size_names;
 }
-add_action( 'switch_theme', 'instapress_media_size' );
+add_filter( 'image_size_names_choose', 'instapress_image_size_names' );
 
 
 /**
@@ -253,9 +245,9 @@ add_action( 'init', 'instapress_unregister_post_taxes' );
 
 
 /**
- * Enqueue admin side thumbnail metabox assets
+ * Enqueue admin side featured metabox assets
  */
-function instapress_thumbnail_assets() {
+function instapress_featured_assets() {
     $screen = get_current_screen();
 
     if ( is_object( $screen ) && 'post' === $screen->post_type ) {
@@ -271,58 +263,68 @@ function instapress_thumbnail_assets() {
         wp_enqueue_media();
 
         // Insert admin styles
-        wp_enqueue_style( 'instapress-thumbnail', $include . '/styles/thumbnail-metabox.css', array(), $version );
+        wp_enqueue_style( 'instapress-featured', $include . '/styles/featured-metabox.css', array(), $version );
 
         // Insert admin scripts
-        wp_enqueue_script( 'instapress-thumbnail', $include . '/scripts/thumbnail-metabox.js', array( 'jquery' ), $version );
+        wp_enqueue_script( 'instapress-featured', $include . '/scripts/featured-metabox.js', array( 'jquery' ), $version );
     }
 }
-add_action( 'admin_enqueue_scripts', 'instapress_thumbnail_assets' );
+add_action( 'admin_enqueue_scripts', 'instapress_featured_assets' );
 
 
 /**
- * Add custom thumbnail metabox
+ * Add custom featured metabox
  */
-function instapress_thumbnail_metabox() {
-    $label = _x( 'Featured Image', 'custom thumbnail metabox title', 'instapress' );
+function instapress_featured_metabox() {
+    $label = _x( 'Featured Image', 'custom featured metabox title', 'instapress' );
 
-    add_meta_box( 'instapress-thumbnail-metabox', $label, 'instapress_thumbnail_callback', 'post', 'normal', 'high' );
+    add_meta_box( 'instapress-featured-metabox', $label, 'instapress_featured_callback', 'post', 'normal', 'high' );
 }
-add_action( 'add_meta_boxes', 'instapress_thumbnail_metabox', 20 );
+add_action( 'add_meta_boxes', 'instapress_featured_metabox' );
 
 
 /**
  * Custom thumnbnail metabox callback
  */
-function instapress_thumbnail_callback( $post, $meta ) {
-    $thumbnail = get_post_meta( $post->ID, '_thumbnail_id', true );
+function instapress_featured_callback( $post ) {
+    $featured = get_post_meta( $post->ID, '_thumbnail_id', true );
 
-    if ( $thumbnail && get_post( $thumbnail ) ) {
-        printf( '<div class="thumbnail-image"><img src="%s" alt="%s"></div>',
-            wp_get_attachment_image_url( $thumbnail, 'post-thumbnail' ),
+    if ( $featured && get_post( $featured ) ) {
+        printf(
+            '<img class="featured-image" src="%s" alt="%s">',
+            wp_get_attachment_image_url( $featured, 'featured' ),
             esc_html( $post->post_title )
         );
     }
 
-    printf( '<div class="thumbnail-placeholder">%3$s <a href="%1$s" class="button">%2$s</a></div>',
+    printf(
+        '<div class="featured-form">%3$s <a href="%1$s" class="button featured-append">%2$s</a></div>',
         esc_url( get_upload_iframe_src( 'image', $post->ID ) ),
         __( 'Set featured image', 'instapress' ),
-        __( 'No image selected', 'instapress' )
+        __( 'No featured image selected', 'instapress' )
     );
 
-    printf( '<input type="hidden" name="_thumbnail_id" value="%s">',
-        esc_attr( $thumbnail ? $thumbnail : '-1' )
+    printf(
+        '<div class="featured-manage"><button type="button" class="button featured-remove">%s</button></div>',
+        __( 'Remove image', 'instapress' )
     );
+
+    printf(
+        '<input type="hidden" id="instapress-featured" name="_thumbnail_id" value="%s">',
+        esc_attr( $featured ? $featured : '-1' )
+    );
+
+    wp_nonce_field( 'metabox', 'instapress_featured_nonce' );
 }
 
 
 /**
- * Sabe custom thumbnail metabox
+ * Sabe custom featured metabox
  */
-function instapress_thumbnail_save( $post_id ) {
-    $nonce = 'instapress_thumbnail_nonce';
+function instapress_featured_save( $post_id ) {
+    $nonce = 'instapress_featured_nonce';
 
-    if ( empty( $_POST[$nonce] ) ) {
+    if ( empty( $_POST[ $nonce ] ) ) {
         return;
     }
 
@@ -338,9 +340,13 @@ function instapress_thumbnail_save( $post_id ) {
         return;
     }
 
-   // update_post_meta( $post_id, self::$meta_options, $_REQUEST[self::$meta_options]);
+    if( empty( $_POST['_thumbnail_id'] ) ) {
+        return;
+    }
+
+    update_post_meta( $post_id, '_thumbnail_id', $_POST['_thumbnail_id']);
 }
-add_action( 'save_post', 'instapress_thumbnail_save' );
+add_action( 'save_post', 'instapress_featured_save' );
 
 
 /**

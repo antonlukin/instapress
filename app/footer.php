@@ -9,12 +9,12 @@
 
 <footer class="footer">
     <?php
-        if ( get_theme_mod( 'instapress_footer_copy' ) ) {
+        if ( get_theme_mod( 'instapress_footer_copy' ) ) :
             printf(
                 '<div class="footer-copy">%s</div>',
                 get_theme_mod( 'instapress_footer_copy', '' )
             );
-        }
+        endif;
     ?>
 </footer>
 
