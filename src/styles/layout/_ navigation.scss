@@ -1,0 +1,47 @@
+.navigation {
+  display: block;
+  position: relative;
+
+  width: 100%;
+  margin: 1.5rem auto 0;
+
+  border-top: solid 1px lighten($color-dark, 10%);
+
+  .nav-links {
+    display: flex;
+    position: relative;
+
+    padding: 0.5rem 0;
+    font-size: 0.8125rem;
+    color: $color-utility;
+
+    a {
+      display: block;
+
+      border-bottom: none;
+      transition: color .25s;
+
+      &:hover {
+        color: lighten($color-utility, 10%);
+      }
+    }
+  }
+
+  .nav-next {
+    margin-left: auto;
+  }
+
+  .page-numbers {
+    display: block;
+    padding: 0 0.625rem;
+
+    &.current {
+      cursor: default;
+      color: $color-text;
+    }
+
+    &.current:hover {
+      color: $color-text;
+    }
+  }
+}

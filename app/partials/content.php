@@ -9,12 +9,12 @@
 
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'post' ); ?>>
     <?php
-        if ( get_theme_mod( 'instapress_internal_pages' ) === 'enable' ) :
+        if ( get_theme_mod( 'instapress_internal_pages' ) === 'enable' ) {
             printf(
                 '<a class="entry-permalink" href="%s"></a>',
                 esc_url( get_permalink() )
             );
-        endif;
+        }
     ?>
 
     <figure class="entry-thumbnail">
@@ -27,9 +27,9 @@
 
     <footer class="entry-summary">
         <?php
-            if ( function_exists( 'instapress_show_summary' ) ) :
+            if ( function_exists( 'instapress_show_summary' ) ) {
                 instapress_show_summary();
-            endif;
+            }
         ?>
     </footer>
 </article>

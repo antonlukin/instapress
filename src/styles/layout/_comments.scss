@@ -134,6 +134,20 @@
       margin-bottom: 0;
     }
 
+    &.bypostauthor .fn:after {
+      content: '';
+      position: absolute;
+
+      width: 8px;
+      height: 5px;
+
+      border: solid 2px $color-utility;
+      border-right: none;
+      border-top: none;
+      border-radius: 1px;
+      transform: rotate(-45deg) translate(2px, 8px);
+    }
+
     a {
       color: $color-utility;
 

@@ -10,4 +10,11 @@
       grid-template-columns: repeat($i, 1fr);
     }
   }
+
+  .gallery-caption {
+    padding: 0.25rem 0;
+    font-size: 0.75rem;
+
+    color: darken($color-text, 15%);
+  }
 }

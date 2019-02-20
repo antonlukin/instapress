@@ -48,23 +48,26 @@ a {
 }
 
 button {
-  display: block;
+  display: inline-block;
   cursor: pointer;
   outline: none;
 
   max-width: 100%;
-  padding: 0.5rem;
+  min-width: 6rem;
+  padding: 0.5rem 1rem;
   overflow: hidden;
 
   line-height: 1.5;
   font-size: 0.8125rem;
+  font-weight: 400;
   text-overflow: ellipsis;
+  text-align: center;
   white-space: nowrap;
 
   color: $color-dark;
   background-color: $color-link;
 
-  border: 1px solid transparent;
+  border: 1px solid darken($color-dark, 3%);;
   border-radius: 2px;
 
   transition: background-color .25s;

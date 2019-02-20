@@ -26,8 +26,10 @@ if ( post_password_required() ) {
 						'echo' => false,
 						'style' => 'div'
 					)
-				)
-			);
+                )
+            );
+
+            the_comments_navigation();
 		}
 
 		comment_form(

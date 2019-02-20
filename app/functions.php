@@ -11,6 +11,19 @@
 
 
 /**
+ * Set the content width in pixels.
+ *
+ * To support retina featured image size, we should use increased width
+ */
+function instapress_content_width() {
+    global $content_width;
+
+	$content_width = apply_filters( 'instapress_content_width', 1200 );
+}
+add_action( 'after_setup_theme', 'instapress_content_width', 0 );
+
+
+/**
  * Insert required js files
  *
  * We can easily clear static cache on theme version update.
@@ -63,6 +76,11 @@ function instapress_setup() {
 
     // Enable support for Post Thumbnails on posts and pages.
     add_theme_support( 'post-thumbnails' );
+
+    // Add custom background support
+    add_theme_support( 'custom-background', array(
+        'default-color' => '21252b'
+    ) );
 
     // Set post thumbnail default size
     set_post_thumbnail_size( 300, 300, true );
@@ -156,22 +174,24 @@ add_filter( 'nav_menu_link_attributes', 'instapress_menu_link_class', 10, 3 );
  * Replace annoying post classes
  */
 function instapress_post_class( $classes, $class, $post_id ) {
-    $classes = array();
+    if( ! is_admin() ) {
+        $classes = array();
 
-    if ( $class ) {
-		if ( ! is_array( $class ) ) {
-			$class = preg_split( '#\s+#', $class );
+        if ( $class ) {
+            if ( ! is_array( $class ) ) {
+                $class = preg_split( '#\s+#', $class );
+            }
+
+            $classes = array_map( 'esc_attr', $class );
         }
 
-		$classes = array_map( 'esc_attr', $class );
-    }
+        // Display post type
+        $classes[] = 'type-' . get_post_type( $post_id );
 
-    $post_type = get_post_type( $post_id );
-
-    if( 'post' === $post_type ) {
-        $classes[] = 'post-image';
-    } else {
-        $classes[] = 'post-' . $post_type;
+        // Sticky for Sticky Posts
+        if ( is_sticky( $post_id ) && is_home() ) {
+            $classes[] = 'sticky';
+        }
     }
 
     return $classes;
@@ -419,7 +439,8 @@ function instapress_customizer_settings( $wp_customize ) {
 
     // Use internal pages
     $wp_customize->add_setting( 'instapress_internal_pages', array(
-        'default' => 'enable'
+        'default' => 'enable',
+        'sanitize_callback' => 'santize_text_field'
     ) );
 
     $wp_customize->add_control( new WP_Customize_Control(
@@ -436,7 +457,8 @@ function instapress_customizer_settings( $wp_customize ) {
 
     // Show summary meta
     $wp_customize->add_setting( 'instapress_summary_meta', array(
-        'default' => 'disable'
+        'default' => 'disable',
+        'sanitize_callback' => 'santize_text_field'
     ) );
 
     $wp_customize->add_control( new WP_Customize_Control(
@@ -453,7 +475,8 @@ function instapress_customizer_settings( $wp_customize ) {
 
     // Author field in summary
     $wp_customize->add_setting( 'instapress_summary_author', array(
-        'default' => 'disable'
+        'default' => 'disable',
+        'sanitize_callback' => 'santize_text_field'
     ) );
 
     $wp_customize->add_control( new WP_Customize_Control(
@@ -469,7 +492,9 @@ function instapress_customizer_settings( $wp_customize ) {
     ) );
 
     // Footer copy text
-    $wp_customize->add_setting( 'instapress_footer_copy' );
+    $wp_customize->add_setting( 'instapress_footer_copy', array(
+        'sanitize_callback' => 'wp_kses_post'
+    ) );
 
     $wp_customize->add_control( new WP_Customize_Code_Editor_Control(
         $wp_customize, 'instapress_footer_copy', array(
@@ -532,25 +557,25 @@ function instapress_comment_form_fields( $fields ) {
 
     $fields['comment'] = sprintf(
         '<p><textarea id="comment" name="comment" placeholder="%s" required></textarea></p>',
-        __( 'Leave a Reply' )
+        __( 'Leave a Reply', 'instapress' )
     );
 
     $fields['author'] = sprintf(
         '<p><input id="author" name="author" type="text" value="%s" placeholder="%s" maxlength="245"%s></p>',
         esc_attr( $commenter['comment_author'] ),
-        __( 'Name' ), $requred
+        __( 'Name', 'instapress' ), $requred
     );
 
     $fields['email'] = sprintf(
         '<p><input id="email" name="email" type="email" value="%s" placeholder="%s" maxlength="100"%s></p>',
         esc_attr( $commenter['comment_author_email'] ),
-        __( 'Email' ), $requred
+        __( 'Email', 'instapress' ), $requred
     );
 
     $fields['url'] = sprintf(
         '<p><input id="url" name="url" type="url" value="%s" placeholder="%s" maxlength="200"></p>',
         esc_attr( $commenter['comment_author_url'] ),
-        __( 'Website' )
+        __( 'Website', 'instapress' )
     );
 
     return $fields;
@@ -591,7 +616,7 @@ function instapress_comment_form_submit_button( $submit_button, $args ) {
 	$cancel_link = sprintf(
         '<a id="cancel-comment-reply-link" class="comment-reply-cancel" href="%1s"rel="nofollow"%3$s>%2$s</a>',
         esc_html( $link ) . '#respond',
-        __( 'Cancel reply' ), $display
+        __( 'Cancel reply', 'instapress' ), $display
     );
 
     return $submit_button . $cancel_link;
@@ -606,6 +631,52 @@ function instapress_remove_adminbar_styles() {
 	remove_action( 'wp_head', '_admin_bar_bump_cb' );
 }
 add_action( 'get_header', 'instapress_remove_adminbar_styles' );
+
+
+/**
+ * Add donate button to admin bar
+ *
+ * You can remove this action without a twinge of conscience
+ */
+function instapress_admin_bar_donate( $wp_admin_bar ) {
+    $args = array(
+        'id' => 'donate',
+        'title' => __( 'Donate', 'instapress' ),
+        'href' => 'https://www.paypal.me/antonlukin',
+        'meta' => array(
+            'target' => '_blank',
+            'title' => __( 'Link to PayPal donation form', 'instapress' )
+        )
+    );
+
+    $wp_admin_bar->add_node( $args );
+}
+add_action( 'admin_bar_menu', 'instapress_admin_bar_donate', 90 );
+
+
+/**
+ * Slightly upgrade password protected form
+ */
+function instapress_password_form( $output ) {
+    $output = sprintf(
+        '<form class="post-password-form" action="%3$s" method="post">%1$s %2$s</form>',
+
+        sprintf(
+            '<input name="post_password" type="password" placeholder="%s">',
+            __( 'Your page password', 'instapress' )
+        ),
+
+        sprintf(
+            '<button type="submit" class="submit">%s</button>',
+            __( 'Enter', 'instapress' )
+        ),
+
+        esc_url( site_url( 'wp-login.php?action=postpass', 'login_post' ) )
+    );
+
+    return $output;
+}
+add_filter( 'the_password_form', 'instapress_password_form' );
 
 
 /**

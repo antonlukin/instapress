@@ -3,13 +3,13 @@
   position: relative;
 
   width: 100%;
-  margin: 4rem 0 2rem;
+  margin: 4rem 0 0;
 
   &:first-child {
     margin-top: 0;
   }
 
-  &.post-image {
+  &.type-post {
     width: calc(100% + 2px);
     margin-left: -1px;
     margin-right: -1px;
@@ -19,5 +19,14 @@
 
     border: 1px solid darken($color-dark, 3%);
     border-radius: 3px;
+  }
+
+  &.sticky {
+    border: none;
+    box-shadow: 0 0 2px 1px $color-link;
+  }
+
+  @media screen and (max-width: 767px) {
+    margin-top: 2rem;
   }
 }

@@ -17,6 +17,14 @@
     <div class="entry-article">
         <?php
             the_content();
+
+            wp_link_pages(
+                array(
+                    'before' => '<div class="page-links">',
+                    'after'  => '</div>',
+                    'next_or_number' => 'next'
+                )
+            );
         ?>
     </div>
 </article>

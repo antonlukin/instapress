@@ -10,13 +10,20 @@ get_header(); ?>
 
 <section class="content">
     <?php
-        if ( have_posts() ) :
-            while( have_posts() ) : the_post();
+        if ( have_posts() ) {
+            while( have_posts() ) {
+                the_post();
+
+                // Include default content partial
                 get_template_part( 'partials/content' );
-            endwhile;
-        else :
+            }
+
+            // Show navigation
+            the_posts_pagination();
+        } else {
+            // If no content, include the "No posts found" template
             get_template_part( 'partials/content', 'none' );
-        endif;
+        }
     ?>
 </section>
 

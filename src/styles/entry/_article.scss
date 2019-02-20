@@ -180,6 +180,39 @@
     }
   }
 
+  .page-links {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+
+    width: 100%;
+    padding: 0.5rem 0;
+
+    border-top: solid 1px lighten($color-dark, 10%);
+
+    a {
+      display: block;
+
+      color: $color-utility;
+      border-bottom: none;
+
+      &:hover {
+        color: lighten($color-utility, 10%);
+      }
+    }
+  }
+
+  .post-password-form {
+    display: flex;
+
+    width: 100%;
+    margin: 1rem 0;
+
+    .submit {
+      margin-left: 0.5rem;
+    }
+  }
+
   .alignnone {
     margin: 0 1rem 1rem 0;
   }

@@ -1,6 +1,6 @@
 <?php
 /**
- * The main template file
+ * Page template
  *
  * @package instapress
  * @since 1.0
@@ -10,13 +10,16 @@ get_header(); ?>
 
 <section class="content">
     <?php
-        if ( have_posts() ) :
-            while( have_posts() ) : the_post();
+        if ( have_posts() ) {
+            while( have_posts() ) {
+                the_post();
+
+                // Get page content partial
                 get_template_part( 'partials/content', 'page' );
-            endwhile;
-        else :
+            }
+         } else {
             get_template_part( 'partials/content', 'none' );
-        endif;
+         }
     ?>
 </section>
 
