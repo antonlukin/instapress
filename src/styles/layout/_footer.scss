@@ -5,12 +5,13 @@
   width: $width-content;
   max-width: 100%;
   margin: 2rem auto 0;
+  padding: 0 1.25rem;
 
   .footer-copy {
     display: block;
     cursor: default;
 
-    padding: 1rem 1.25rem;
+    padding: 1rem 0;
     font-size: 0.75rem;
     text-align: center;
 

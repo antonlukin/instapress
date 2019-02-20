@@ -39,6 +39,16 @@ body {
       padding-top: 46px;
     }
   }
+
+  &.is-error404 {
+    .header, .footer {
+      display: none;
+    }
+
+    .content {
+      margin-top: 10%;
+    }
+  }
 }
 
 a {

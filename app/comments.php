@@ -10,32 +10,34 @@
  */
 
 if ( post_password_required() ) {
-	return;
+    return;
 }
 
 ?>
 
 <div id="comments" class="comments">
     <?php
-		if ( have_comments() ) {
-			printf(
-				'<div class="comment-list">%s</div>',
+        if ( have_comments() ) {
+            printf(
+                '<div class="comment-list">%s</div>',
 
-				wp_list_comments(
-					array(
-						'echo' => false,
-						'style' => 'div'
-					)
+                wp_list_comments(
+                    array(
+                        'echo' => false,
+                        'style' => 'div'
+                    )
                 )
             );
 
-            the_comments_navigation();
-		}
+            if ( function_exists( 'the_comments_navigation' ) ) {
+                the_comments_navigation();
+            }
+        }
 
-		comment_form(
-			array(
-				'submit_field' => '<div class="comment-submit">%1$s %2$s</div>'
-			)
-		);
+        comment_form(
+            array(
+                'submit_field' => '<div class="comment-submit">%1$s %2$s</div>'
+            )
+        );
     ?>
 </div>

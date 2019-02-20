@@ -11,6 +11,14 @@
 
 
 /**
+ * Instpress only works in WordPress 4.2 or later.
+ */
+if ( version_compare( $GLOBALS['wp_version'], '4.2', '<' ) ) {
+	wp_die( 'Instpress theme requires WordPress 4.2 or greater' );
+}
+
+
+/**
  * Set the content width in pixels.
  *
  * To support retina featured image size, we should use increased width
@@ -21,24 +29,6 @@ function instapress_content_width() {
 	$content_width = apply_filters( 'instapress_content_width', 1200 );
 }
 add_action( 'after_setup_theme', 'instapress_content_width', 0 );
-
-
-/**
- * Insert required js files
- *
- * We can easily clear static cache on theme version update.
- * While debug is true, use timestamp as script curren version.
- */
-function instapress_scripts() {
-    if( defined( 'WP_DEBUG' ) && true === WP_DEBUG ) {
-        $version = date( 'U' );
-    } else {
-        $version = wp_get_theme()->get( 'Version' );
-    }
-
-    wp_enqueue_script('instapress-scripts', get_template_directory_uri() . '/assets/scripts.min.js', array(), $version, true);
-}
-add_action( 'wp_enqueue_scripts', 'instapress_scripts' );
 
 
 /**
@@ -76,11 +66,6 @@ function instapress_setup() {
 
     // Enable support for Post Thumbnails on posts and pages.
     add_theme_support( 'post-thumbnails' );
-
-    // Add custom background support
-    add_theme_support( 'custom-background', array(
-        'default-color' => '21252b'
-    ) );
 
     // Set post thumbnail default size
     set_post_thumbnail_size( 300, 300, true );
@@ -265,6 +250,21 @@ add_action( 'init', 'instapress_unregister_post_taxes' );
 
 
 /**
+ * Append thumbnail to feed post content
+ */
+function instapress_content_feed( $content ) {
+    global $post;
+
+    if ( has_post_thumbnail( $post->ID ) ) {
+        $content = get_the_post_thumbnail( $post->ID, 'featured' );
+    }
+
+    return $content;
+}
+add_filter( 'the_content_feed', 'instapress_content_feed' );
+
+
+/**
  * Enqueue admin side featured metabox assets
  */
 function instapress_featured_assets() {
@@ -287,6 +287,13 @@ function instapress_featured_assets() {
 
         // Insert admin scripts
         wp_enqueue_script( 'instapress-featured', $include . '/scripts/featured-metabox.js', array( 'jquery' ), $version );
+
+        $options = array(
+            'title' => __( 'Choose featured image', 'instapress' )
+        );
+
+        // Add script options
+        wp_localize_script( 'instapress-featured', 'instapress_featured', $options );
     }
 }
 add_action( 'admin_enqueue_scripts', 'instapress_featured_assets' );
@@ -310,11 +317,15 @@ function instapress_featured_callback( $post ) {
     $featured = get_post_meta( $post->ID, '_thumbnail_id', true );
 
     if ( $featured && get_post( $featured ) ) {
-        printf(
-            '<img class="featured-image" src="%s" alt="%s">',
-            wp_get_attachment_image_url( $featured, 'featured' ),
-            esc_html( $post->post_title )
-        );
+        $thumbnail = wp_get_attachment_image_src( $featured, 'featured' );
+
+        if ( isset( $thumbnail['0'] ) ) {
+            printf(
+                '<img class="featured-image" src="%s" alt="%s">',
+                esc_url($thumbnail['0'] ),
+                esc_html( $post->post_title )
+            );
+        }
     }
 
     printf(
@@ -440,7 +451,7 @@ function instapress_customizer_settings( $wp_customize ) {
     // Use internal pages
     $wp_customize->add_setting( 'instapress_internal_pages', array(
         'default' => 'enable',
-        'sanitize_callback' => 'santize_text_field'
+        'sanitize_callback' => 'sanitize_text_field'
     ) );
 
     $wp_customize->add_control( new WP_Customize_Control(
@@ -458,7 +469,7 @@ function instapress_customizer_settings( $wp_customize ) {
     // Show summary meta
     $wp_customize->add_setting( 'instapress_summary_meta', array(
         'default' => 'disable',
-        'sanitize_callback' => 'santize_text_field'
+        'sanitize_callback' => 'sanitize_text_field'
     ) );
 
     $wp_customize->add_control( new WP_Customize_Control(
@@ -476,7 +487,7 @@ function instapress_customizer_settings( $wp_customize ) {
     // Author field in summary
     $wp_customize->add_setting( 'instapress_summary_author', array(
         'default' => 'disable',
-        'sanitize_callback' => 'santize_text_field'
+        'sanitize_callback' => 'sanitize_text_field'
     ) );
 
     $wp_customize->add_control( new WP_Customize_Control(

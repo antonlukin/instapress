@@ -12,9 +12,16 @@ jQuery(document).ready(function ($) {
   function setFeatured(e) {
     e.preventDefault();
 
+    // Set options from localize array
+    var options = {};
+    if (typeof instapress_featured === 'object') {
+      options = instapress_featured;
+    }
+
     // Open default wp.media image frame
     var frame = wp.media({
-      multiple: false
+      multiple: false,
+      title: options.title || ''
     });
 
     // On open frame select current attachment

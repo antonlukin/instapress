@@ -40,7 +40,7 @@
   }
 
   strong, b {
-    font-weight: 600;
+    font-weight: 500;
   }
 
   em, i {
@@ -57,12 +57,16 @@
     font-size: smaller;
   }
 
-  code, pre {
-    padding: 0.5rem 1rem;
+  big {
+    font-weight: 500;
+  }
+
+  code, pre, kbd {
+    padding: 0.25rem 0.5rem;
     white-space: pre-wrap;
 
     font-family: $font-monospace;
-    font-size: 0.75rem;
+    font-size: 0.6875rem;
 
     color: darken($color-text, 15%);
     background-color: lighten($color-dark, 3%);
@@ -86,7 +90,7 @@
     margin-top: 1.25rem;
 
     font-size: 0.875rem;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 1.25;
     letter-spacing: 0.25px;
   }
@@ -130,7 +134,7 @@
     padding-left: 1.5rem;
 
     li {
-      margin: 0 0.5rem 0.5rem;
+      margin: 0.5rem;
     }
 
     @media screen and (max-width: 767px) {
@@ -146,16 +150,43 @@
     list-style-type: disc;
   }
 
+  dt {
+    font-weight: 500;
+  }
+
+  dd {
+    margin: 0.5rem;
+  }
+
   blockquote {
-    padding-left: calc(2rem - 2px);
+    padding-left: calc(1.5rem - 2px);
     border-left: 2px solid $color-value;
 
     p {
       font-style: italic;
     }
 
-    @media screen and (max-width: 767px) {
-      padding-left: calc(1.5rem - 2px);
+    cite {
+      display: block;
+
+      margin-top: 1rem;
+      font-style: normal;
+      font-weight: 400;
+    }
+  }
+
+  table {
+    border-collapse: collapse;
+
+    th, td {
+      padding: 0.25rem 0;
+      padding-right: 1rem;
+      text-align: left;
+    }
+
+    th {
+      font-weight: 400;
+      border-bottom: solid 1px lighten($color-dark, 10%);
     }
   }
 
