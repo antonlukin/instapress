@@ -14,7 +14,7 @@
  * Instpress only works in WordPress 4.2 or later.
  */
 if ( version_compare( $GLOBALS['wp_version'], '4.2', '<' ) ) {
-	wp_die( 'Instpress theme requires WordPress 4.2 or greater' );
+    wp_die( 'Instpress theme requires WordPress 4.2 or greater' );
 }
 
 
@@ -26,7 +26,7 @@ if ( version_compare( $GLOBALS['wp_version'], '4.2', '<' ) ) {
 function instapress_content_width() {
     global $content_width;
 
-	$content_width = apply_filters( 'instapress_content_width', 1200 );
+    $content_width = apply_filters( 'instapress_content_width', 1200 );
 }
 add_action( 'after_setup_theme', 'instapress_content_width', 0 );
 
@@ -97,11 +97,11 @@ add_action( 'after_setup_theme', 'instapress_setup' );
  * Add custom intermediate size
  */
 function instapress_image_size_names( $size_names ) {
-	$size_names = array_merge( $size_names, array(
+    $size_names = array_merge( $size_names, array(
         'featured' => __( 'Featured image', 'instapress' )
     ) );
 
-	return $size_names;
+    return $size_names;
 }
 add_filter( 'image_size_names_choose', 'instapress_image_size_names' );
 
@@ -237,16 +237,13 @@ add_action( 'init', 'instapress_remove_post_thumbnail' );
 
 
 /**
- * Remove default taxes support from posts
+ * Remove category support from posts
  */
-function instapress_unregister_post_taxes() {
-    // Unregister tags
-    unregister_taxonomy_for_object_type( 'post_tag', 'post' );
-
+function instapress_unregister_category() {
     // Unregister categories
     unregister_taxonomy_for_object_type( 'category', 'post' );
 }
-add_action( 'init', 'instapress_unregister_post_taxes' );
+add_action( 'init', 'instapress_unregister_category' );
 
 
 /**
@@ -524,8 +521,8 @@ add_action( 'customize_register', 'instapress_customizer_settings' );
  */
 function instapress_comments_scripts() {
     if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
-		wp_enqueue_script( 'comment-reply' );
-	}
+        wp_enqueue_script( 'comment-reply' );
+    }
 }
 add_action( 'wp_enqueue_scripts', 'instapress_comments_scripts' );
 
@@ -545,7 +542,7 @@ function instapress_comment_form_defaults( $defaults ) {
         'title_reply_to'       => '',
         'comment_notes_before' => '',
         'cancel_reply_before'  => '',
-		'cancel_reply_after'   => '',
+        'cancel_reply_after'   => '',
         'submit_button'        => '<button name="%1$s" type="submit" id="%2$s" class="%3$s">%4$s</button>',
         'submit_field'         => '<div class="comments-submit">%1$s %2$s</div>',
     );
@@ -599,7 +596,7 @@ add_filter( 'comment_form_fields', 'instapress_comment_form_fields' );
  */
 function instapress_comment_reply_link( $link ) {
     if ( get_option( 'comment_registration' ) && ! is_user_logged_in() ) {
-		$link = (string) null;
+        $link = (string) null;
     }
 
     return $link;
@@ -624,7 +621,7 @@ function instapress_comment_form_submit_button( $submit_button, $args ) {
         $display = ' style="display: none;"';
     }
 
-	$cancel_link = sprintf(
+    $cancel_link = sprintf(
         '<a id="cancel-comment-reply-link" class="comment-reply-cancel" href="%1s"rel="nofollow"%3$s>%2$s</a>',
         esc_html( $link ) . '#respond',
         __( 'Cancel reply', 'instapress' ), $display
@@ -639,7 +636,7 @@ add_filter( 'comment_form_submit_button', 'instapress_comment_form_submit_button
  * Remove admin bar styles
  */
 function instapress_remove_adminbar_styles() {
-	remove_action( 'wp_head', '_admin_bar_bump_cb' );
+    remove_action( 'wp_head', '_admin_bar_bump_cb' );
 }
 add_action( 'get_header', 'instapress_remove_adminbar_styles' );
 
@@ -715,7 +712,13 @@ if( ! function_exists( 'instapress_show_summary' ) ) :
             }
         }
 
-        if( count( $fields ) > 0 ) {
+        $terms = get_the_tags();
+
+        if ( is_array( $terms ) ) {
+            $fields['tags'] = implode( ', ', wp_list_pluck( $terms, 'name' ) );
+        }
+
+        if ( count( $fields ) > 0 ) {
             foreach ( $fields as $label => $value ) {
                 printf(
                     '<p class="entry-summary-field"><span>"%s"</span>: <strong>"%s"</strong></p>',
