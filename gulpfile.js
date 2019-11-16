@@ -16,15 +16,23 @@ var path = {
 gulp.task('styles', function (done) {
   let styles = gulp.src([path.source + '/styles/app.scss'])
     .pipe(plumber())
-    .pipe(sassGlob())
-    .pipe(sass({ errLogToConsole: true }))
-    .pipe(prefix({ browsers: ['ie >= 10', 'ff >= 30', 'chrome >= 34', 'safari >= 7', 'opera >= 23', 'ios >= 7', 'android >= 4.4'] }))
+    .pipe(sassGlob({
+      allowEmpty: true
+    }))
+    .pipe(sass({
+      errLogToConsole: true
+    }))
+    .pipe(prefix({
+      browsers: ['ie >= 10', 'ff >= 30', 'chrome >= 34', 'safari >= 7', 'opera >= 23', 'ios >= 7', 'android >= 4.4']
+    }))
 
   styles.pipe(rename('styles.css'))
     .pipe(gulp.dest(path.assets))
 
   styles.pipe(concat('styles.min.css'))
-    .pipe(cleanCss({ compatibility: 'ie8' }))
+    .pipe(cleanCss({
+      compatibility: 'ie8'
+    }))
     .pipe(gulp.dest(path.assets))
 
   done();
