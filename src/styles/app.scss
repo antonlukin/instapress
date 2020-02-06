@@ -36,7 +36,10 @@ body {
 
 a {
   text-decoration: none;
-  transition: color .25s;
+
+  &:hover {
+    transition: color .25s;
+  }
 }
 
 label {

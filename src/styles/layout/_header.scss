@@ -4,7 +4,7 @@
 
   width: $width-content;
   max-width: 100%;
-  margin: 1.5rem auto;
+  margin: 3rem auto 1.5rem;
   padding: 0 1.25rem;
 
   .header-menu {
@@ -29,6 +29,11 @@
 
       background: linear-gradient(90deg, rgba($color-dark, 0), $color-dark);
     }
+  }
+
+
+  @media screen and (max-width: 767px) {
+    margin-top: 1.5rem;
   }
 
   @media screen and (max-width: 479px) {

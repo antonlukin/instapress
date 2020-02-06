@@ -26,7 +26,7 @@ if ( version_compare( $GLOBALS['wp_version'], '4.2', '<' ) ) {
 function instapress_content_width() {
     global $content_width;
 
-    $content_width = apply_filters( 'instapress_content_width', 1200 );
+    $content_width = apply_filters( 'instapress_content_width', 600 );
 }
 add_action( 'after_setup_theme', 'instapress_content_width', 0 );
 

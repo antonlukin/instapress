@@ -107,8 +107,9 @@ body {
   -ms-text-size-adjust: 100%; }
 
 a {
-  text-decoration: none;
-  transition: color .25s; }
+  text-decoration: none; }
+  a:hover {
+    transition: color .25s; }
 
 label {
   cursor: pointer;
@@ -699,6 +700,9 @@ button {
   @media screen and (max-width: 767px) {
     .footer {
       margin-top: 1.5rem; } }
+  @media screen and (max-width: 479px) {
+    .footer {
+      padding: 0 0.75rem; } }
 
 .gallery {
   display: grid;
@@ -733,7 +737,7 @@ button {
   position: relative;
   width: 40rem;
   max-width: 100%;
-  margin: 1.5rem auto;
+  margin: 3rem auto 1.5rem;
   padding: 0 1.25rem; }
   .header .header-menu {
     display: block;
@@ -751,6 +755,9 @@ button {
       height: 100%;
       width: 1.5rem;
       background: linear-gradient(90deg, rgba(33, 37, 43, 0), #21252b); }
+  @media screen and (max-width: 767px) {
+    .header {
+      margin-top: 1.5rem; } }
   @media screen and (max-width: 479px) {
     .header {
       padding: 0 0.75rem; } }
