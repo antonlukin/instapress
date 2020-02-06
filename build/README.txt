@@ -1,8 +1,8 @@
 === Instapress ===
 Contributors: Anton Lukin
 Requires at least: WordPress 4.2
-Tested up to: WordPress 5.0
-Version: 1.0
+Tested up to: WordPress 5.3
+Version: 1.1
 License: MIT License
 License URI: https://github.com/antonlukin/instapress/blob/master/LICENSE
 Tags: one-column, sticky-post, threaded-comments, translation-ready
@@ -31,6 +31,9 @@ License: MIT
 Source: https://sourcefoundry.org/hack/
 
 == Changelog ==
+
+= 1.1 =
+* Released: February 7, 2020
 
 = 1.0 =
 * Released: February 21, 2019

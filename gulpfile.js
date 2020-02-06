@@ -10,7 +10,7 @@ var rename = require('gulp-rename');
 
 var path = {
   source: 'src/',
-  assets: 'app/assets/'
+  assets: 'build/assets/'
 }
 
 gulp.task('styles', function (done) {
@@ -22,17 +22,13 @@ gulp.task('styles', function (done) {
     .pipe(sass({
       errLogToConsole: true
     }))
-    .pipe(prefix({
-      browsers: ['ie >= 10', 'ff >= 30', 'chrome >= 34', 'safari >= 7', 'opera >= 23', 'ios >= 7', 'android >= 4.4']
-    }))
+    .pipe(prefix())
 
   styles.pipe(rename('styles.css'))
     .pipe(gulp.dest(path.assets))
 
   styles.pipe(concat('styles.min.css'))
-    .pipe(cleanCss({
-      compatibility: 'ie8'
-    }))
+    .pipe(cleanCss())
     .pipe(gulp.dest(path.assets))
 
   done();

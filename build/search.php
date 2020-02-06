@@ -1,16 +1,22 @@
 <?php
 /**
- * The main template file
+ * Search template file
  *
  * @package instapress
- * @since 1.0
+ * @since 1.1
  */
 
 get_header(); ?>
 
 <section class="content">
     <?php
-        if ( have_posts() ) {
+        get_search_form();
+
+        if ( have_posts() && get_search_query() ) {
+            if ( get_the_archive_title() ) {
+                get_template_part( 'partials/caption', 'search' );
+            }
+
             while( have_posts() ) {
                 the_post();
 

@@ -1,10 +1,8 @@
-.entry-article {
+.entry {
   display: block;
 
   font-size: 0.8125rem;
   font-weight: 300;
-
-  will-change: transform;
 
   & > * {
     margin: 0 0 0.75rem;
@@ -211,21 +209,29 @@
     }
   }
 
+  .page-title {
+    padding-bottom: 0.5rem;
+
+    border-bottom: 1px solid lighten($color-dark, 10%);
+  }
+
   .page-links {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     position: relative;
 
     width: 100%;
-    padding: 0.5rem 0;
+    margin: 2rem 0 0;
+    padding: 0.125rem 0.5rem;
+    font-size: 0.8125rem;
 
     border-top: solid 1px lighten($color-dark, 10%);
 
     a {
       display: block;
 
+      padding: 0.375rem 0.625rem;
       color: $color-utility;
-      border-bottom: none;
 
       &:hover {
         color: lighten($color-utility, 10%);

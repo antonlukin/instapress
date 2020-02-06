@@ -3,14 +3,14 @@
  * The template for displaying 404 pages
  *
  * @package instapress
- * @since 1.0
+ * @since 1.1
  */
 
 get_header(); ?>
 
 <section class="content">
     <?php
-        get_template_part( 'partials/content', 'none' );
+        get_template_part( 'partials/caption', 'none' );
     ?>
 </section>
 

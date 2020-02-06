@@ -1,4 +1,1 @@
-composer.lock
 node_modules/
-vendor/
-.docker/data/

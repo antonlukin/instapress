@@ -12,7 +12,7 @@
         if ( get_theme_mod( 'instapress_footer_copy' ) ) {
             printf(
                 '<div class="footer-copy">%s</div>',
-                get_theme_mod( 'instapress_footer_copy', '' )
+                wp_kses_post( get_theme_mod( 'instapress_footer_copy', '' ) )
             );
         }
     ?>

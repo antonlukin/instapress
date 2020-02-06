@@ -8,28 +8,28 @@
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'post' ); ?>>
-    <?php
-        if ( get_theme_mod( 'instapress_internal_pages' ) === 'enable' ) {
+    <div class="card link-card">
+        <?php
             printf(
-                '<a class="entry-permalink" href="%s"></a>',
+                '<a class="card-permalink" href="%s"></a>',
                 esc_url( get_permalink() )
             );
-        }
-    ?>
-
-    <figure class="entry-thumbnail">
-        <?php
-            the_post_thumbnail( 'featured',
-                array( 'class' => 'entry-thumbnail-image' )
-            );
         ?>
-    </figure>
 
-    <footer class="entry-summary">
-        <?php
-            if ( function_exists( 'instapress_show_summary' ) ) {
-                instapress_show_summary();
-            }
-        ?>
-    </footer>
+        <figure class="card-thumbnail">
+            <?php
+                the_post_thumbnail( 'featured',
+                    array( 'class' => 'card-thumbnail-image' )
+                );
+            ?>
+        </figure>
+
+        <ul class="card-summary">
+            <?php
+                if ( function_exists( 'instapress_show_summary' ) ) {
+                    instapress_show_summary();
+                }
+            ?>
+        </ul>
+    </div>
 </article>

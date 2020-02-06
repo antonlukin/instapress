@@ -1,28 +1,30 @@
 .footer {
   display: block;
   position: relative;
+  clear: both;
 
   width: $width-content;
   max-width: 100%;
-  margin: 2rem auto 0;
+  margin: 3rem auto 0;
   padding: 0 1.25rem;
 
   .footer-copy {
     display: block;
     cursor: default;
 
-    padding: 1rem 0;
+    padding: 1rem 0.625rem;
     font-size: 0.75rem;
-    text-align: center;
+    text-align: left;
 
     color: $color-utility;
+    border-top: solid 1px lighten($color-dark, 10%);
 
     a:hover {
       color: lighten($color-utility, 10%);
     }
   }
 
-  @media screen and (max-width: 479px) {
-    margin-top: 1rem;
+  @media screen and (max-width: 767px) {
+    margin-top: 1.5rem;
   }
 }

@@ -1,11 +1,10 @@
-.navigation {
-  display: block;
+.pagination {
+  display: flex;
+  flex-flow: row wrap;
   position: relative;
 
   width: 100%;
-  margin: 1.5rem auto 0;
-
-  border-top: solid 1px lighten($color-dark, 10%);
+  margin: -1.5rem 0;
 
   .nav-links {
     display: flex;
@@ -17,9 +16,6 @@
 
     a {
       display: block;
-
-      border-bottom: none;
-      transition: color .25s;
 
       &:hover {
         color: lighten($color-utility, 10%);
@@ -35,6 +31,7 @@
     display: block;
     padding: 0 0.625rem;
 
+
     &.current {
       cursor: default;
       color: $color-text;
@@ -43,5 +40,9 @@
     &.current:hover {
       color: $color-text;
     }
+  }
+
+  @media screen and (max-width: 767px) {
+    margin: -0.75rem 0;
   }
 }

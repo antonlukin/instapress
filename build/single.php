@@ -23,7 +23,7 @@ get_header(); ?>
 				}
             }
         } else {
-            get_template_part( 'partials/content', 'none' );
+            get_template_part( 'partials/caption', 'none' );
         }
     ?>
 </section>

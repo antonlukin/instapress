@@ -4,15 +4,14 @@
 
   width: $width-content;
   max-width: 100%;
-  margin: 0 auto;
-  padding: 1rem 1.25rem;
+  margin: 1.5rem auto;
+  padding: 0 1.25rem;
 
   .header-menu {
     display: block;
     position: relative;
 
     width: 100%;
-    margin: 1rem auto 0.5rem;
 
     border-bottom: solid 1px lighten($color-dark, 10%);
 
@@ -33,6 +32,6 @@
   }
 
   @media screen and (max-width: 479px) {
-    padding: 0.75rem;
+    padding: 0 0.75rem;
   }
 }

@@ -1,9 +1,9 @@
 <?php
 /**
- * The main template file
+ * Archive template file
  *
  * @package instapress
- * @since 1.0
+ * @since 1.1
  */
 
 get_header(); ?>
@@ -11,6 +11,10 @@ get_header(); ?>
 <section class="content">
     <?php
         if ( have_posts() ) {
+            if ( get_the_archive_title() ) {
+                get_template_part( 'partials/caption' );
+            }
+
             while( have_posts() ) {
                 the_post();
 

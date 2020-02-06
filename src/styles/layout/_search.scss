@@ -1,0 +1,25 @@
+.search-form {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+
+  margin: 1.5rem 0 -0.5rem -0.5rem;
+
+  label {
+    align-items: stretch;
+    display: flex;
+    font-size: inherit;
+    margin: 0;
+    width: 100%;
+  }
+
+  .search-field {
+    flex: 1 1 auto;
+    margin: 0 0 0.5rem 0.5rem;
+  }
+
+  .search-submit {
+    flex: 0 0 auto;
+    margin: 0 0 0.5rem 0.5rem;
+  }
+}

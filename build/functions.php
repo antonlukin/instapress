@@ -107,416 +107,6 @@ add_filter( 'image_size_names_choose', 'instapress_image_size_names' );
 
 
 /**
- * Replace useless menu classes with custom ones
- *
- * Applies to menu in primary theme location only
- */
-function instapress_menu_classes( $classes, $item, $args ) {
-    if( $args->theme_location === 'primary' ) {
-        // Redefine classes array
-        $classes = array( 'menu-item' );
-
-        if( $item->current === true ) {
-            $classes[] = 'menu-item-current';
-        }
-    }
-
-    return $classes;
-}
-add_filter( 'nav_menu_css_class', 'instapress_menu_classes', 10, 3 );
-
-
-/**
- * Remove stupid menu id attribute
- *
- * Just remove this filter if you want to use menu item id
- * Applies to menu in primary theme location only
- */
-function instapress_menu_item_id( $classes, $item, $args ) {
-    if( $args->theme_location === 'primary' ) {
-        return '';
-    }
-}
-add_filter( 'nav_menu_item_id', 'instapress_menu_item_id', 10, 3 );
-
-
-/**
- * Add class to link menu items
- *
- * Applies to menu in primary theme location only
- */
-function instapress_menu_link_class( $atts, $item, $args ) {
-    if ( $args->theme_location === 'primary' ) {
-        $atts['class'] = 'menu-item-link';
-    }
-
-    return $atts;
-}
-add_filter( 'nav_menu_link_attributes', 'instapress_menu_link_class', 10, 3 );
-
-
-/**
- * Replace annoying post classes
- */
-function instapress_post_class( $classes, $class, $post_id ) {
-    if( ! is_admin() ) {
-        $classes = array();
-
-        if ( $class ) {
-            if ( ! is_array( $class ) ) {
-                $class = preg_split( '#\s+#', $class );
-            }
-
-            $classes = array_map( 'esc_attr', $class );
-        }
-
-        // Display post type
-        $classes[] = 'type-' . get_post_type( $post_id );
-
-        // Sticky for Sticky Posts
-        if ( is_sticky( $post_id ) && is_home() ) {
-            $classes[] = 'sticky';
-        }
-    }
-
-    return $classes;
-}
-add_filter( 'post_class', 'instapress_post_class', 10, 3 );
-
-
-/**
- * Add is- prefix to all body classes
- */
-function instapress_body_class( $wp_classes, $extra_classes ) {
-    $body_classes = $wp_classes + $extra_classes;
-
-    foreach ( $body_classes as &$body_class ) {
-        // Skip no-customize-support class
-        if ( 'no-customize-support' !== $body_class ) {
-            $body_class = 'is-' . $body_class;
-        }
-    }
-
-    // Remove link to avoid unexpected behavior
-    unset( $body_class );
-
-    return $body_classes;
-}
-add_filter( 'body_class', 'instapress_body_class', 10, 2 );
-
-
-/**
- * Disable block editor for default posts type
- */
-function instapress_block_editor( $post_type ) {
-    if ( in_array( $post_type, array( 'post', 'page') ) ) {
-        return false;
-    }
-
-    return true;
-}
-add_filter( 'use_block_editor_for_post_type', 'instapress_block_editor', 10, 2 );
-
-
-/**
- * Remove default editor for posts
- */
-function instapress_remove_post_editor() {
-    remove_post_type_support( 'post', 'editor');
-}
-add_action( 'init', 'instapress_remove_post_editor' );
-
-
-/**
- * Remove thumbnail support from posts
- */
-function instapress_remove_post_thumbnail() {
-    remove_post_type_support( 'post', 'thumbnail' );
-}
-add_action( 'init', 'instapress_remove_post_thumbnail' );
-
-
-/**
- * Remove category support from posts
- */
-function instapress_unregister_category() {
-    // Unregister categories
-    unregister_taxonomy_for_object_type( 'category', 'post' );
-}
-add_action( 'init', 'instapress_unregister_category' );
-
-
-/**
- * Append thumbnail to feed post content
- */
-function instapress_content_feed( $content ) {
-    global $post;
-
-    if ( has_post_thumbnail( $post->ID ) ) {
-        $content = get_the_post_thumbnail( $post->ID, 'featured' );
-    }
-
-    return $content;
-}
-add_filter( 'the_content_feed', 'instapress_content_feed' );
-
-
-/**
- * Enqueue admin side featured metabox assets
- */
-function instapress_featured_assets() {
-    $screen = get_current_screen();
-
-    if ( is_object( $screen ) && 'post' === $screen->post_type ) {
-        $include = get_template_directory_uri() . '/include';
-
-        if( defined( 'WP_DEBUG' ) && true === WP_DEBUG ) {
-            $version = date( 'U' );
-        } else {
-            $version = wp_get_theme()->get( 'Version' );
-        }
-
-        // Insert wp media scripts
-        wp_enqueue_media();
-
-        // Insert admin styles
-        wp_enqueue_style( 'instapress-featured', $include . '/styles/featured-metabox.css', array(), $version );
-
-        // Insert admin scripts
-        wp_enqueue_script( 'instapress-featured', $include . '/scripts/featured-metabox.js', array( 'jquery' ), $version );
-
-        $options = array(
-            'title' => __( 'Choose featured image', 'instapress' )
-        );
-
-        // Add script options
-        wp_localize_script( 'instapress-featured', 'instapress_featured', $options );
-    }
-}
-add_action( 'admin_enqueue_scripts', 'instapress_featured_assets' );
-
-
-/**
- * Add custom featured metabox
- */
-function instapress_featured_metabox() {
-    $label = _x( 'Featured Image', 'custom featured metabox title', 'instapress' );
-
-    add_meta_box( 'instapress-featured-metabox', $label, 'instapress_featured_callback', 'post', 'normal', 'high' );
-}
-add_action( 'add_meta_boxes', 'instapress_featured_metabox' );
-
-
-/**
- * Custom thumnbnail metabox callback
- */
-function instapress_featured_callback( $post ) {
-    $featured = get_post_meta( $post->ID, '_thumbnail_id', true );
-
-    if ( $featured && get_post( $featured ) ) {
-        $thumbnail = wp_get_attachment_image_src( $featured, 'featured' );
-
-        if ( isset( $thumbnail['0'] ) ) {
-            printf(
-                '<img class="featured-image" src="%s" alt="%s">',
-                esc_url($thumbnail['0'] ),
-                esc_html( $post->post_title )
-            );
-        }
-    }
-
-    printf(
-        '<div class="featured-form">%3$s <a href="%1$s" class="button featured-append">%2$s</a></div>',
-        esc_url( get_upload_iframe_src( 'image', $post->ID ) ),
-        __( 'Set featured image', 'instapress' ),
-        __( 'No featured image selected', 'instapress' )
-    );
-
-    printf(
-        '<div class="featured-manage"><button type="button" class="button featured-remove">%s</button></div>',
-        __( 'Remove image', 'instapress' )
-    );
-
-    printf(
-        '<input type="hidden" id="instapress-featured" name="_thumbnail_id" value="%s">',
-        esc_attr( $featured ? $featured : '-1' )
-    );
-
-    wp_nonce_field( 'metabox', 'instapress_featured_nonce' );
-}
-
-
-/**
- * Sabe custom featured metabox
- */
-function instapress_featured_save( $post_id ) {
-    $nonce = 'instapress_featured_nonce';
-
-    if ( empty( $_POST[ $nonce ] ) ) {
-        return;
-    }
-
-    if( ! wp_verify_nonce( $_POST[ $nonce ], 'metabox' ) ) {
-        return;
-    }
-
-    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-        return;
-    }
-
-    if ( ! current_user_can( 'edit_post', $post_id ) ) {
-        return;
-    }
-
-    if( empty( $_POST['_thumbnail_id'] ) ) {
-        return;
-    }
-
-    update_post_meta( $post_id, '_thumbnail_id', $_POST['_thumbnail_id']);
-}
-add_action( 'save_post', 'instapress_featured_save' );
-
-
-/**
- * Remove useless emojis styles
- */
-function instapress_remove_emoji() {
-    remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
-    remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
-    remove_action( 'wp_print_styles', 'print_emoji_styles' );
-    remove_action( 'admin_print_styles', 'print_emoji_styles' );
-    remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
-    remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );
-    remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
-}
-add_action( 'init', 'instapress_remove_emoji' );
-
-
-/**
- * Remove wordpress meta for security reasons
- */
-function instapress_remove_meta() {
-    remove_action( 'wp_head', 'wlwmanifest_link' );
-    remove_action( 'wp_head', 'rsd_link' );
-    remove_action( 'wp_head', 'adjacent_posts_rel_link', 10 );
-    remove_action( 'wp_head', 'rest_output_link_wp_head', 10 );
-    remove_action( 'wp_head', 'wp_oembed_add_discovery_links', 10 );
-}
-add_action( 'init', 'instapress_remove_meta' );
-
-
-/**
- * We don't use gutenberg for now so it would be better to remove useless styles
- */
-function instapress_remove_block_styles() {
-    wp_dequeue_style( 'wp-block-library' );
-}
-add_action( 'wp_print_styles', 'instapress_remove_block_styles', 11 );
-
-
-/**
- * Disable post attachment pages and redirect to post parent if exists
- */
-function instapress_attachment_template() {
-    global $post;
-
-    if ( is_attachment() ) {
-        if ( isset( $post->post_parent ) && absint( $post->post_parent ) > 0 ) {
-            $url = get_permalink( $post->post_parent );
-        } else {
-            $url = home_url( '/' );
-        }
-
-        wp_redirect( esc_url( $url ), 301 );
-        exit;
-    }
-}
-add_action( 'template_redirect', 'instapress_attachment_template' );
-
-
-/**
- * Add article options to customizer
- */
-function instapress_customizer_settings( $wp_customize ) {
-    $wp_customize->add_section( 'instapress_settings',
-        array(
-            'title' => __( 'Theme settings', 'instapress' ),
-            'priority' => 50
-        )
-    );
-
-    // Use internal pages
-    $wp_customize->add_setting( 'instapress_internal_pages', array(
-        'default' => 'enable',
-        'sanitize_callback' => 'sanitize_text_field'
-    ) );
-
-    $wp_customize->add_control( new WP_Customize_Control(
-        $wp_customize, 'instapress_internal_pages', array(
-            'label' => __( 'Use post internal pages', 'instapress' ),
-            'section' => 'instapress_settings',
-            'type' => 'radio',
-            'choices' => array(
-                'enable' => __( 'Enable', 'instapress' ),
-                'disable' => __( 'Disable', 'instapress' )
-            )
-        )
-    ) );
-
-    // Show summary meta
-    $wp_customize->add_setting( 'instapress_summary_meta', array(
-        'default' => 'disable',
-        'sanitize_callback' => 'sanitize_text_field'
-    ) );
-
-    $wp_customize->add_control( new WP_Customize_Control(
-        $wp_customize, 'instapress_summary_meta', array(
-            'label' => __( 'Display summary custom fields', 'instapress' ),
-            'section' => 'instapress_settings',
-            'type' => 'radio',
-            'choices' => array(
-                'enable' => __( 'Enable', 'instapress' ),
-                'disable' => __( 'Disable', 'instapress' )
-            )
-        )
-    ) );
-
-    // Author field in summary
-    $wp_customize->add_setting( 'instapress_summary_author', array(
-        'default' => 'disable',
-        'sanitize_callback' => 'sanitize_text_field'
-    ) );
-
-    $wp_customize->add_control( new WP_Customize_Control(
-        $wp_customize, 'instapress_summary_author', array(
-            'label' => __( 'Display summary author', 'instapress' ),
-            'section' => 'instapress_settings',
-            'type' => 'radio',
-            'choices' => array(
-                'enable' => __( 'Enable', 'instapress' ),
-                'disable' => __( 'Disable', 'instapress' )
-            )
-        )
-    ) );
-
-    // Footer copy text
-    $wp_customize->add_setting( 'instapress_footer_copy', array(
-        'sanitize_callback' => 'wp_kses_post'
-    ) );
-
-    $wp_customize->add_control( new WP_Customize_Code_Editor_Control(
-        $wp_customize, 'instapress_footer_copy', array(
-            'label' => __( 'Footer description', 'instapress' ),
-            'section' => 'instapress_settings',
-            'code_type' => 'text/html',
-            'priority' => 25
-        )
-    ) );
-}
-add_action( 'customize_register', 'instapress_customizer_settings' );
-
-
-/**
  * Enqueue comment-reply script
  */
 function instapress_comments_scripts() {
@@ -633,36 +223,6 @@ add_filter( 'comment_form_submit_button', 'instapress_comment_form_submit_button
 
 
 /**
- * Remove admin bar styles
- */
-function instapress_remove_adminbar_styles() {
-    remove_action( 'wp_head', '_admin_bar_bump_cb' );
-}
-add_action( 'get_header', 'instapress_remove_adminbar_styles' );
-
-
-/**
- * Add donate button to admin bar
- *
- * You can remove this action without a twinge of conscience
- */
-function instapress_admin_bar_donate( $wp_admin_bar ) {
-    $args = array(
-        'id' => 'donate',
-        'title' => __( 'Donate', 'instapress' ),
-        'href' => 'https://www.paypal.me/antonlukin',
-        'meta' => array(
-            'target' => '_blank',
-            'title' => __( 'Link to PayPal donation form', 'instapress' )
-        )
-    );
-
-    $wp_admin_bar->add_node( $args );
-}
-add_action( 'admin_bar_menu', 'instapress_admin_bar_donate', 90 );
-
-
-/**
  * Slightly upgrade password protected form
  */
 function instapress_password_form( $output ) {
@@ -688,44 +248,97 @@ add_filter( 'the_password_form', 'instapress_password_form' );
 
 
 /**
+ * Add theme options to customizer
+ */
+function instapress_customizer_settings( $wp_customize ) {
+    $wp_customize->add_section( 'instapress_settings',
+        array(
+            'title' => __( 'Theme settings', 'instapress' ),
+            'priority' => 50,
+        )
+    );
+
+    // Show author in summary
+    $wp_customize->add_setting( 'instapress_summary_author', array(
+        'capability' => 'edit_theme_options',
+        'sanitize_callback' => 'absint',
+    ) );
+
+    $wp_customize->add_control( 'instapress_summary_author', array(
+        'type' => 'checkbox',
+        'section' => 'instapress_settings',
+        'priority' => 10,
+        'label' => __( 'Show author in summary', 'instapress' ),
+    ) );
+
+    // Show custom post meta in summary
+    $wp_customize->add_setting( 'instapress_summary_meta', array(
+        'capability' => 'edit_theme_options',
+        'sanitize_callback' => 'absint',
+    ) );
+
+    $wp_customize->add_control( 'instapress_summary_meta', array(
+        'type' => 'checkbox',
+        'section' => 'instapress_settings',
+        'priority' => 10,
+        'label' => __( 'Show custom meta in summary', 'instapress' ),
+    ) );
+
+    // Footer copy text
+    $wp_customize->add_setting( 'instapress_footer_copy', array(
+        'capability' => 'edit_theme_options',
+        'sanitize_callback' => 'wp_kses_post',
+    ) );
+
+    $wp_customize->add_control( new WP_Customize_Code_Editor_Control(
+        $wp_customize, 'instapress_footer_copy', array(
+            'label' => __( 'Footer description', 'instapress' ),
+            'section' => 'instapress_settings',
+            'code_type' => 'text/html',
+            'priority' => 25
+        )
+    ) );
+}
+add_action( 'customize_register', 'instapress_customizer_settings' );
+
+
+/**
  * Template function: show post summary
  */
-if( ! function_exists( 'instapress_show_summary' ) ) :
+if( ! function_exists( 'instapress_show_summary' ) ) {
     function instapress_show_summary() {
         $fields = array(
-            'date' => get_the_date(),
-            'title' => get_the_title(),
+            'date' => esc_html( get_the_date() ),
+            'title' => esc_html( get_the_title() )
         );
 
-        if ( get_theme_mod( 'instapress_summary_author' ) === 'enable' ) {
-            $fields['author'] = get_the_author();
+        if ( get_theme_mod( 'instapress_summary_author' ) === 1 ) {
+            $fields['author'] = get_the_author_posts_link();
         }
 
-        if ( get_theme_mod( 'instapress_summary_meta') === 'enable' ) {
+        if ( get_theme_mod( 'instapress_summary_meta' ) === 1 ) {
             foreach ( (array) get_post_custom_keys() as $key ) {
-                if ( is_protected_meta( trim( $key ), 'post' ) ) {
+                if ( is_protected_meta( $key, 'post' ) ) {
                     continue;
                 }
 
-                $values = array_map( 'trim', get_post_custom_values( $key ) );
+                $values = array_map( 'esc_html', get_post_custom_values( $key ) );
                 $fields[ $key ] = implode( ', ', $values );
             }
         }
 
-        $terms = get_the_tags();
-
-        if ( is_array( $terms ) ) {
-            $fields['tags'] = implode( ', ', wp_list_pluck( $terms, 'name' ) );
+        if ( get_the_tags() ) {
+            $fields['tags'] = get_the_tag_list( null, ', ' );
         }
 
-        if ( count( $fields ) > 0 ) {
-            foreach ( $fields as $label => $value ) {
-                printf(
-                    '<p class="entry-summary-field"><span>"%s"</span>: <strong>"%s"</strong></p>',
-                    esc_html( $label ),
-                    esc_html( $value )
-                );
-            }
+        $fields = apply_filters( 'instapress_summary_fields', $fields );
+
+        foreach ( $fields as $label => $value ) {
+            printf(
+                '<li><span>"%s"</span>: <strong>"%s"</strong></li>',
+                esc_attr( $label ),
+                wp_kses_post( $value )
+            );
         }
     }
-endif;
+}
