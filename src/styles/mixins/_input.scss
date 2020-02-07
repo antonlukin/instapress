@@ -1,6 +1,7 @@
 @mixin input {
   display: block;
   outline: none;
+  appearance: none;
 
   padding: 0.5rem;
   line-height: 1.5;
