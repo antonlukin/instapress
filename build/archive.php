@@ -8,7 +8,7 @@
 
 get_header(); ?>
 
-<section class="content">
+<section class="content" id="content">
     <?php
         if ( have_posts() ) {
             if ( get_the_archive_title() ) {

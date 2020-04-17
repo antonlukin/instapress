@@ -11,7 +11,7 @@
     <div class="card">
         <figure class="card-thumbnail">
             <?php
-                the_post_thumbnail( 'featured',
+                the_post_thumbnail( 'instapress-featured',
                     array( 'class' => 'card-thumbnail-image' )
                 );
             ?>

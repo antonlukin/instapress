@@ -15,7 +15,7 @@
     margin-bottom: 0;
 
     &:hover .card-thumbnail-image {
-      filter: brightness(80%);
+      filter: brightness(120%);
     }
   }
 
@@ -35,6 +35,10 @@
     height: 100%;
 
     border: none;
+
+    &:focus {
+      outline-offset: -3px;
+    }
   }
 
   .card-thumbnail {

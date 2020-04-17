@@ -8,7 +8,7 @@
 
 get_header(); ?>
 
-<section class="content">
+<section class="content" id="content">
     <?php
         get_template_part( 'partials/caption', 'none' );
     ?>

@@ -31,12 +31,10 @@ time, mark, audio, video, input, select, textarea, button {
 a {
   color: inherit;
   cursor: pointer;
-  outline: none;
 }
 
 input {
   background-color: transparent;
-  outline: none;
 }
 
 img {
@@ -95,9 +93,9 @@ footer, header, hgroup, menu, nav, section {
 
   width: auto;
   height: auto;
-  padding: 15px 23px 14px;
+  padding: 1rem 1.5rem;
 
-  color: #444;
+  color: $color-system;
   font-size: 1rem;
   line-height: normal;
   text-decoration: none;

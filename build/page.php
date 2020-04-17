@@ -8,7 +8,7 @@
 
 get_header(); ?>
 
-<section class="content">
+<section class="content" id="content">
     <?php
         if ( have_posts() ) {
             while( have_posts() ) {

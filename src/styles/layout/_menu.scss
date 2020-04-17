@@ -2,7 +2,6 @@
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-  user-select: none;
   scrollbar-width: none;
 
   margin-bottom: -1px;
@@ -22,14 +21,9 @@
     display: block;
     position: relative;
 
-    border-bottom: 1px solid transparent;
-
-    &.current-menu-item {
+    &.current-menu-item a {
+      color: $color-text;
       border-bottom-color: $color-text;
-
-      a {
-        color: $color-text;
-      }
     }
   }
 
@@ -40,8 +34,14 @@
     white-space: nowrap;
     color: $color-utility;
 
+    border-bottom: 1px solid transparent;
+
     &:hover {
       color: lighten($color-utility, 10%);
+    }
+
+    &:focus {
+      outline-offset: -5px;
     }
   }
 }

@@ -56,7 +56,7 @@ add_action( 'wp_enqueue_scripts', 'instapress_styles' );
  */
 function instapress_setup() {
     // Make theme available for translation.
-    load_theme_textdomain( 'instapress', get_template_directory() . '/languages' );
+    load_theme_textdomain( 'instapress' );
 
     // Add default posts and comments RSS feed links to head.
     add_theme_support( 'automatic-feed-links' );
@@ -71,7 +71,7 @@ function instapress_setup() {
     set_post_thumbnail_size( 300, 300, true );
 
     // Add custom thumbnail image size
-    add_image_size( 'featured', 1200, 900, true );
+    add_image_size( 'instapress-featured', 1200, 900, true );
 
     // This theme uses wp_nav_menu() in header and footer.
     register_nav_menus(
@@ -155,25 +155,25 @@ function instapress_comment_form_fields( $fields ) {
 
     $fields['comment'] = sprintf(
         '<p><textarea id="comment" name="comment" placeholder="%s" required></textarea></p>',
-        __( 'Leave a Reply', 'instapress' )
+        esc_attr__( 'Leave a Reply', 'instapress' )
     );
 
     $fields['author'] = sprintf(
         '<p><input id="author" name="author" type="text" value="%s" placeholder="%s" maxlength="245"%s></p>',
         esc_attr( $commenter['comment_author'] ),
-        __( 'Name', 'instapress' ), $requred
+        esc_attr__( 'Name', 'instapress' ), $requred
     );
 
     $fields['email'] = sprintf(
         '<p><input id="email" name="email" type="email" value="%s" placeholder="%s" maxlength="100"%s></p>',
         esc_attr( $commenter['comment_author_email'] ),
-        __( 'Email', 'instapress' ), $requred
+        esc_attr__( 'Email', 'instapress' ), $requred
     );
 
     $fields['url'] = sprintf(
         '<p><input id="url" name="url" type="url" value="%s" placeholder="%s" maxlength="200"></p>',
         esc_attr( $commenter['comment_author_url'] ),
-        __( 'Website', 'instapress' )
+        esc_attr__( 'Website', 'instapress' )
     );
 
     return $fields;
@@ -231,7 +231,7 @@ function instapress_password_form( $output ) {
 
         sprintf(
             '<input name="post_password" type="password" placeholder="%s">',
-            __( 'Your page password', 'instapress' )
+            esc_attr__( 'Your page password', 'instapress' )
         ),
 
         sprintf(
@@ -300,6 +300,29 @@ function instapress_customizer_settings( $wp_customize ) {
     ) );
 }
 add_action( 'customize_register', 'instapress_customizer_settings' );
+
+
+/**
+ * Include a skip to content link at the top of the page so that users can bypass the menu.
+ */
+function instapress_skip_link() {
+	printf(
+        '<a class="skip screen-reader-text" href="#content">%s</a>',
+        __( 'Skip to the content', 'instapress' )
+    );
+}
+
+add_action( 'wp_body_open', 'instapress_skip_link', 5 );
+
+
+/**
+ * Shim for wp_body_open, ensuring backwards compatibility with versions of WordPress older than 5.2.
+ */
+if ( ! function_exists( 'wp_body_open' ) ) {
+	function wp_body_open() {
+		do_action( 'wp_body_open' );
+	}
+}
 
 
 /**

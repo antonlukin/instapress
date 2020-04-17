@@ -6,6 +6,7 @@ $font-monospace: 'Hack', monospace;
 $color-text: #dadada;
 $color-link: #e0923c;
 $color-dark: #21252b;
+$color-system: #21759b;
 
 $color-value: #56b6c2;
 $color-utility: #717e8c;
@@ -18,6 +19,14 @@ $width-content: 40rem;
 
 // Import mixins
 @import "mixins/*.scss";
+
+html {
+  scroll-behavior: smooth;
+
+  @media (prefers-reduced-motion: reduce) {
+      scroll-behavior: auto;
+  }
+}
 
 body {
   display: block;

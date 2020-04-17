@@ -1,0 +1,7 @@
+.skip {
+	z-index: 100000;
+
+  &:focus {
+    @include button;
+  }
+}
