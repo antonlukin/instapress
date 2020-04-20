@@ -1,13 +1,18 @@
 # Instapress
 
-**Contributors:** Anton Lukin  
-**Requires at least:** WordPress 4.2  
-**Tested up to:** WordPress 5.3.2  
-**Version:** 1.1  
-**License:** MIT License  
-**License URI:** https://github.com/antonlukin/instapress/blob/master/LICENSE
+Fast and furious WordPress theme to share photos with small description.
+
+Demo: https://lukin.blog
 
 
-## Description
+## Installation
 
-Instapress is a WordPress theme to share photos with small description.
+Just upload [latest release](https://github.com/antonlukin/instapress/releases) to `/wp-content/themes` and activate theme from admin dashboard.
+
+## Development
+
+1. Fork and clone git repository
+2. Install npm modules with `yarn`
+3. Update styles if you need
+4. Recompile styles with `gulp styles` using [gulp](https://gulpjs.com/docs/en/getting-started/quick-start)
+5. Bump version in `app/styles.css` and `package.json`
