@@ -6,8 +6,8 @@ Demo: https://lukin.blog
 
 ## Screenshots
 
-![screenshot-1](https://user-images.githubusercontent.com/454185/80354306-992c4800-8887-11ea-8ac3-7e6c3a3e927f.png)
-![screenshot-2](https://user-images.githubusercontent.com/454185/80354402-c0831500-8887-11ea-8ddd-f10dfd3a811b.png)
+- [Front page](https://user-images.githubusercontent.com/454185/80354306-992c4800-8887-11ea-8ac3-7e6c3a3e927f.png)
+- [Single post](https://user-images.githubusercontent.com/454185/80354402-c0831500-8887-11ea-8ddd-f10dfd3a811b.png)
 
 ## Installation
 
