@@ -4,10 +4,14 @@ Fast and furious WordPress theme to share photos with small description.
 
 Demo: https://lukin.blog
 
+## Screenshots
+
+![screenshot-1](https://user-images.githubusercontent.com/454185/80354306-992c4800-8887-11ea-8ac3-7e6c3a3e927f.png)
+![screenshot-2](https://user-images.githubusercontent.com/454185/80354402-c0831500-8887-11ea-8ddd-f10dfd3a811b.png)
 
 ## Installation
 
-Just upload [latest release](https://github.com/antonlukin/instapress/releases) to `/wp-content/themes` and activate theme from admin dashboard.
+Just search `Instpress` and activate theme from admin dashboard. You can also manually upload [latest release](https://downloads.wordpress.org/theme/instapress.zip) to `/wp-content/themes` and activate it. 
 
 ## Development
 
