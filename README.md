@@ -11,7 +11,7 @@ Demo: https://lukin.blog
 
 ## Installation
 
-Just search `Instpress` and activate theme from admin dashboard. You can also manually upload [latest release](https://downloads.wordpress.org/theme/instapress.zip) to `/wp-content/themes` and activate it. 
+Just search `Instapress` and activate theme from admin dashboard. You can also manually upload [latest release](https://downloads.wordpress.org/theme/instapress.zip) to `/wp-content/themes` and activate it. 
 
 ## Development
 
