@@ -4,7 +4,6 @@
 
   width: calc(100% + 2px);
   margin: 0 -1px 3rem;
-  overflow: hidden;
 
   background-color: lighten($color-dark, 3%);
 
@@ -35,10 +34,6 @@
     height: 100%;
 
     border: none;
-
-    &:focus {
-      outline-offset: -3px;
-    }
   }
 
   .card-thumbnail {

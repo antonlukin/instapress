@@ -1,6 +1,6 @@
 {
   "name": "instapress",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "author": "Anton Lukin",
   "description": "Fast and furious WordPress theme to share photos with small description",
   "main": "gulpfile.js",
