@@ -1,8 +1,11 @@
 # Instapress
 
 Fast and furious WordPress theme to share photos with small description.
-
 Demo: https://lukin.blog
+
+## Documentation
+
+Detailed information about the plugin, its configuration and enhancement, is described on the [official website](https://wpget.org/instapress/).
 
 ## Screenshots
 

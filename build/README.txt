@@ -2,7 +2,7 @@
 Contributors: antonlukin
 Requires at least: 4.2
 Tested up to: 5.4
-Version: 1.2.1
+Version: 1.2.2
 License: MIT License
 License URI: https://github.com/antonlukin/instapress/blob/master/LICENSE
 Tags: one-column, sticky-post, threaded-comments, translation-ready
@@ -31,6 +31,10 @@ License: MIT
 Source: https://sourcefoundry.org/hack/
 
 == Changelog ==
+
+= 1.2.2 =
+* Released: November 23, 2021
+* Border radius on post card styles fixed
 
 = 1.2.1 =
 * Released: July 2, 2020
