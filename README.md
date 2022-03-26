@@ -5,7 +5,7 @@ Demo: https://lukin.blog
 
 ## Documentation
 
-Detailed information about the plugin, its configuration and enhancement, is described on the [official website](https://wpget.org/instapress/).
+Detailed information about the plugin, its configuration and enhancement, is described on the [official website](https://wpset.org/instapress/).
 
 ## Screenshots
 
